@@ -40,14 +40,16 @@ public class DinheiroController {
 		return Double.valueOf(valor);
 	}
 
-	public static void main(String[] args) {
-		double[] coiso = calcParcelas(34.987, 8);
-		System.out.println(dinheiroToString(34.567));
-		System.out.println(stringToDinheiro("-24,767"));
-		System.out.println(formatDinheiro(24.467));
-		System.out.println(formatDinheiro("24,467"));
-		for (double d : coiso) {
-			System.out.println(d);
-		}
-	}
+	// public static void main(String[] args) {
+	// String herp = "8000,01";
+	// herp = formatDinheiro(herp);
+	// double[] coiso = calcParcelas(stringToDinheiro(herp), 10);
+	// System.out.println(dinheiroToString(34.567));
+	// System.out.println(stringToDinheiro("-24,767"));
+	// System.out.println(formatDinheiro(24.467));
+	// System.out.println(formatDinheiro("24,467"));
+	// for (double d : coiso) {
+	// System.out.println(d);
+	// }
+	// }
 }
