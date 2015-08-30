@@ -235,7 +235,7 @@ public class TransacaoController {
 			c.setTime(row.getCell(0).getDateCellValue());
 			if ((data != null) && (categoria != null) && (descricao != null)
 					&& (parcelas != null) && (nomeCartao != null)) {
-				System.out.println("Tudo preenchido");
+				// System.out.println("Tudo preenchido");
 				if ((DataController.calendarToString(c).equals(data))
 						&& (row.getCell(6).getStringCellValue()
 								.equals(categoria))
@@ -244,7 +244,7 @@ public class TransacaoController {
 						&& (quantasParcelas(row.getCell(5).getStringCellValue()) == parcelas)
 						&& (seTransaCartao(row.getCell(5).getStringCellValue())
 								.equals(nomeCartao))) {
-					System.out.println("E consegui encontrar");
+					// System.out.println("E consegui encontrar");
 					transacoes.put(row.getCell(5).getStringCellValue(), i);
 				}
 			} else if ((categoria == null) && (descricao == null)
@@ -260,7 +260,6 @@ public class TransacaoController {
 				if ((data != null)
 						&& (DataController.calendarToString(c).equals(data))) {
 				} else {
-					System.out.println(data);
 					// System.out.print(i + " Mas a data não correspondeu...");
 					teste = false;
 				}
@@ -344,13 +343,6 @@ public class TransacaoController {
 	public static int quantasParcelas(String descricao) {
 		if (seTransParcelada(descricao)) {
 			String[] descricaoDividida = descricao.split(" ");
-			System.out
-					.println(Integer
-							.parseInt(descricaoDividida[descricaoDividida.length - 1]
-									.substring(
-											0,
-											descricaoDividida[descricaoDividida.length - 1]
-													.indexOf("/"))));
 			return Integer
 					.parseInt(descricaoDividida[descricaoDividida.length - 1]
 							.substring(

@@ -15,7 +15,7 @@ public class DinheiroController {
 		}
 
 		if (valor != (parcela * qtdParcelas)) {
-			parcela = formatDinheiro(parcela + formatDinheiro(0.01));
+			parcela = formatDinheiro(valor - parcela * (qtdParcelas - 1));
 			parcelas[qtdParcelas - 1] = parcela;
 		}
 
@@ -41,9 +41,9 @@ public class DinheiroController {
 	}
 
 	// public static void main(String[] args) {
-	// String herp = "8000,01";
+	// String herp = "847,36";
 	// herp = formatDinheiro(herp);
-	// double[] coiso = calcParcelas(stringToDinheiro(herp), 10);
+	// double[] coiso = calcParcelas(stringToDinheiro(herp), 7);
 	// System.out.println(dinheiroToString(34.567));
 	// System.out.println(stringToDinheiro("-24,767"));
 	// System.out.println(formatDinheiro(24.467));
