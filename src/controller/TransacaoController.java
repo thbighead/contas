@@ -175,22 +175,23 @@ public class TransacaoController {
 						+ nova.categoria + " " + nova.descricao + " "
 						+ nova.valor))) {
 			if (!DataController.calendarToString(nova.data).isEmpty()) {
-				toUpdate.getCell(0).setCellValue(nova.data);
+				toUpdate.getCell(0).setCellValue(nova.data.getTime());
 			}
 
 			if (!dataUtil.isEmpty()) {
-				toUpdate.getCell(1).setCellValue(dataUtil);
+				toUpdate.getCell(1).setCellValue(
+						DataController.stringToCalendar(dataUtil).getTime());
 			}
 			// toUpdate.getCell(3).setCellValue();
 			if (nova.valor != null) {
 				toUpdate.getCell(4).setCellValue(nova.valor);
 			}
 
-			if (nova.descricao.isEmpty()) {
+			if (!nova.descricao.isEmpty()) {
 				toUpdate.getCell(5).setCellValue(nova.descricao);
 			}
 
-			if (nova.categoria.isEmpty()) {
+			if (!nova.categoria.isEmpty()) {
 				toUpdate.getCell(6).setCellValue(nova.categoria);
 			}
 
