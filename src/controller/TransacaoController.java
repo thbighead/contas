@@ -130,35 +130,35 @@ public class TransacaoController {
 					DataController.stringToCalendar(dataUtil).getTime());
 
 			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
-			novaLinha.createCell(2);
-			novaLinha.getCell(2).setCellType(Cell.CELL_TYPE_FORMULA);
+			novaLinha.createCell(3);
+			novaLinha.getCell(3).setCellType(Cell.CELL_TYPE_FORMULA);
 			estiloCell.setAlignment(CellStyle.ALIGN_CENTER);
-			novaLinha.getCell(2).setCellStyle(estiloCell);
-			novaLinha.getCell(2).setCellFormula(
+			novaLinha.getCell(3).setCellStyle(estiloCell);
+			novaLinha.getCell(3).setCellFormula(
 					"WEEKDAY(A" + (novaLinha.getRowNum() + 1) + ",1)");
 
 			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
-			novaLinha.createCell(3);
-			novaLinha.getCell(3).setCellType(Cell.CELL_TYPE_NUMERIC);
-			estiloCell.setAlignment(CellStyle.ALIGN_RIGHT);
-			novaLinha.getCell(3).setCellStyle(estiloCell);
-			novaLinha.getCell(3).setCellValue(nova.valor);
-
-			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
 			novaLinha.createCell(4);
-			novaLinha.getCell(4).setCellType(Cell.CELL_TYPE_STRING);
-			estiloCell.setAlignment(CellStyle.ALIGN_LEFT);
+			novaLinha.getCell(4).setCellType(Cell.CELL_TYPE_NUMERIC);
+			estiloCell.setAlignment(CellStyle.ALIGN_RIGHT);
 			novaLinha.getCell(4).setCellStyle(estiloCell);
-			novaLinha.getCell(4).setCellValue(nova.descricao);
+			novaLinha.getCell(4).setCellValue(nova.valor);
 
 			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
 			novaLinha.createCell(5);
 			novaLinha.getCell(5).setCellType(Cell.CELL_TYPE_STRING);
 			estiloCell.setAlignment(CellStyle.ALIGN_LEFT);
 			novaLinha.getCell(5).setCellStyle(estiloCell);
-			novaLinha.getCell(5).setCellValue(nova.categoria);
+			novaLinha.getCell(5).setCellValue(nova.descricao);
 
-			for (int j = 0; j < 5; j++) {
+			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
+			novaLinha.createCell(6);
+			novaLinha.getCell(6).setCellType(Cell.CELL_TYPE_STRING);
+			estiloCell.setAlignment(CellStyle.ALIGN_LEFT);
+			novaLinha.getCell(6).setCellStyle(estiloCell);
+			novaLinha.getCell(6).setCellValue(nova.categoria);
+
+			for (int j = 0; j < 7; j++) {
 				planilhaPasta.autoSizeColumn(j);
 			}
 
@@ -181,20 +181,20 @@ public class TransacaoController {
 			if (!dataUtil.isEmpty()) {
 				toUpdate.getCell(1).setCellValue(dataUtil);
 			}
-			// toUpdate.getCell(2).setCellValue();
+			// toUpdate.getCell(3).setCellValue();
 			if (nova.valor != null) {
-				toUpdate.getCell(3).setCellValue(nova.valor);
+				toUpdate.getCell(4).setCellValue(nova.valor);
 			}
 
 			if (nova.descricao.isEmpty()) {
-				toUpdate.getCell(4).setCellValue(nova.descricao);
+				toUpdate.getCell(5).setCellValue(nova.descricao);
 			}
 
 			if (nova.categoria.isEmpty()) {
-				toUpdate.getCell(5).setCellValue(nova.categoria);
+				toUpdate.getCell(6).setCellValue(nova.categoria);
 			}
 
-			for (int j = 0; j < 5; j++) {
+			for (int j = 0; j < 7; j++) {
 				planilhaPasta.autoSizeColumn(j);
 			}
 
@@ -211,9 +211,9 @@ public class TransacaoController {
 		while (row != null) {
 			c.setTime(row.getCell(0).getDateCellValue());
 			transacao = DataController.calendarToString(c) + " "
+					+ row.getCell(6).getStringCellValue() + " "
 					+ row.getCell(5).getStringCellValue() + " "
-					+ row.getCell(4).getStringCellValue() + " "
-					+ row.getCell(3).getNumericCellValue();
+					+ row.getCell(4).getNumericCellValue();
 			transacoes.add(transacao);
 			i++;
 			row = planilhaPasta.getRow(i);
@@ -236,15 +236,15 @@ public class TransacaoController {
 					&& (parcelas != null) && (nomeCartao != null)) {
 				System.out.println("Tudo preenchido");
 				if ((DataController.calendarToString(c).equals(data))
-						&& (row.getCell(5).getStringCellValue()
+						&& (row.getCell(6).getStringCellValue()
 								.equals(categoria))
-						&& (descricao.contains(row.getCell(4)
+						&& (descricao.contains(row.getCell(5)
 								.getStringCellValue()))
-						&& (quantasParcelas(row.getCell(4).getStringCellValue()) == parcelas)
-						&& (seTransaCartao(row.getCell(4).getStringCellValue())
+						&& (quantasParcelas(row.getCell(5).getStringCellValue()) == parcelas)
+						&& (seTransaCartao(row.getCell(5).getStringCellValue())
 								.equals(nomeCartao))) {
 					System.out.println("E consegui encontrar");
-					transacoes.put(row.getCell(4).getStringCellValue(), i);
+					transacoes.put(row.getCell(5).getStringCellValue(), i);
 				}
 			} else if ((categoria == null) && (descricao == null)
 					&& (parcelas == null) && (nomeCartao == null)) {
@@ -252,7 +252,7 @@ public class TransacaoController {
 				// .println("Nenhum preenchido, vou pegar tudo dessa data");
 				if ((data != null)
 						&& (DataController.calendarToString(c).equals(data))) {
-					transacoes.put(row.getCell(4).getStringCellValue(), i);
+					transacoes.put(row.getCell(5).getStringCellValue(), i);
 				}
 			} else {
 				// System.out.println("Pelo menos um preenchido, não todos");
@@ -264,21 +264,21 @@ public class TransacaoController {
 					teste = false;
 				}
 				if (teste && (categoria != null)) {
-					if (row.getCell(5).getStringCellValue().equals(categoria)) {
+					if (row.getCell(6).getStringCellValue().equals(categoria)) {
 					} else {
 						// System.out.print("Mas a categoria não correspondeu...");
 						teste = false;
 					}
 				}
 				if (teste && (descricao != null)) {
-					if (row.getCell(4).getStringCellValue().contains(descricao)) {
+					if (row.getCell(5).getStringCellValue().contains(descricao)) {
 					} else {
 						// System.out.print("Mas a descrição não correspondeu...");
 						teste = false;
 					}
 				}
 				if (teste && (parcelas != null)) {
-					if (quantasParcelas(row.getCell(4).getStringCellValue()) == parcelas) {
+					if (quantasParcelas(row.getCell(5).getStringCellValue()) == parcelas) {
 					} else {
 						// System.out
 						// .print("Mas a quantidade de parcelas não correspondeu...");
@@ -286,17 +286,16 @@ public class TransacaoController {
 					}
 				}
 				if (teste && (nomeCartao != null)) {
-					if (seTransaCartao(row.getCell(4).getStringCellValue())
+					if (seTransaCartao(row.getCell(5).getStringCellValue())
 							.equals(nomeCartao)) {
 					} else {
 						// System.out.print("Mas o cartão não correspondeu...");
 						teste = false;
 					}
 				}
-				System.out.println("");
 				if (teste) {
 					// System.out.println("E eu consegui achar!");
-					transacoes.put(row.getCell(4).getStringCellValue(), i);
+					transacoes.put(row.getCell(5).getStringCellValue(), i);
 				}
 
 				teste = true;
@@ -316,14 +315,14 @@ public class TransacaoController {
 					ultimaLinha.getCell(0).getNumericCellValue());
 			toDelete.getCell(1).setCellValue(
 					ultimaLinha.getCell(1).getNumericCellValue());
-			toDelete.getCell(2).setCellValue(
-					ultimaLinha.getCell(2).getCellFormula());
 			toDelete.getCell(3).setCellValue(
-					ultimaLinha.getCell(3).getNumericCellValue());
+					ultimaLinha.getCell(3).getCellFormula());
 			toDelete.getCell(4).setCellValue(
-					ultimaLinha.getCell(4).getStringCellValue());
+					ultimaLinha.getCell(4).getNumericCellValue());
 			toDelete.getCell(5).setCellValue(
 					ultimaLinha.getCell(5).getStringCellValue());
+			toDelete.getCell(6).setCellValue(
+					ultimaLinha.getCell(6).getStringCellValue());
 			planilhaPasta.removeRow(ultimaLinha);
 
 			PlanilhaController.salvarPasta();
@@ -364,9 +363,11 @@ public class TransacaoController {
 	public static String seTransaCartao(String descricao) {
 		String[] cartoes = CartaoController.listar(0, 0);
 		for (String cartao : cartoes) {
-			if ((descricao.substring(0, descricao.indexOf("-")).equals(cartao))
-					&& (descricao.contains("-"))) {
-				return cartao;
+			if (descricao.contains("-")) {
+				if ((descricao.substring(0, descricao.indexOf("-"))
+						.equals(cartao))) {
+					return cartao;
+				}
 			}
 		}
 		return null;

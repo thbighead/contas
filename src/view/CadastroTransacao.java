@@ -112,8 +112,13 @@ public class CadastroTransacao extends JFrame {
 		contentPane.add(textDescricao);
 		textDescricao.setColumns(10);
 		if ((operacao == "Alterar")
-				&& (!linha.getCell(4).getStringCellValue().isEmpty())) {
-			textDescricao.setText(linha.getCell(4).getStringCellValue());
+				&& (!linha.getCell(5).getStringCellValue().isEmpty())) {
+			String getDescricao = linha.getCell(5).getStringCellValue();
+			if (TransacaoController.seTransaCartao(getDescricao) != null) {
+				getDescricao = getDescricao
+						.substring(getDescricao.indexOf("-") + 1);
+			}
+			textDescricao.setText(getDescricao);
 		}
 
 		JLabel lblCategoria = new JLabel("Categoria:");
@@ -125,8 +130,8 @@ public class CadastroTransacao extends JFrame {
 		comboCategoria.setBounds(90, 33, 180, 20);
 		contentPane.add(comboCategoria);
 		if ((operacao == "Alterar")
-				&& (!linha.getCell(5).getStringCellValue().isEmpty())) {
-			comboCategoria.setSelectedItem(linha.getCell(5)
+				&& (!linha.getCell(6).getStringCellValue().isEmpty())) {
+			comboCategoria.setSelectedItem(linha.getCell(6)
 					.getStringCellValue());
 		}
 
@@ -173,19 +178,22 @@ public class CadastroTransacao extends JFrame {
 		contentPane.add(comboCartao);
 		comboCartao.setVisible(false);
 		if ((operacao == "Alterar")
-				&& (!linha.getCell(4).getStringCellValue().isEmpty())
-				&& (TransacaoController.seTransaCartao(linha.getCell(4)
+				&& (!linha.getCell(5).getStringCellValue().isEmpty())
+				&& (TransacaoController.seTransaCartao(linha.getCell(5)
 						.getStringCellValue()) != null)) {
+			groupCartaoSN.setSelected(rdbtnCartaoSim.getModel(), true);
 			comboCartao.setVisible(true);
 			comboCartao.setSelectedItem(TransacaoController
-					.seTransaCartao(linha.getCell(4).getStringCellValue()));
+					.seTransaCartao(linha.getCell(5).getStringCellValue()));
 		}
 
 		chckbxApenasDiaUtil = new JCheckBox("Apenas Dia Útil");
 		chckbxApenasDiaUtil.setBounds(276, 57, 115, 23);
 		contentPane.add(chckbxApenasDiaUtil);
 		if ((operacao == "Alterar")
-				&& (!linha.getCell(1).getDateCellValue().toString().isEmpty())) {
+				&& (!linha.getCell(1).getDateCellValue().toString().isEmpty())
+				&& (TransacaoController.seTransaCartao(linha.getCell(5)
+						.getStringCellValue()) == null)) {
 			chckbxApenasDiaUtil.setSelected(true);
 		}
 		chckbxApenasDiaUtil.addItemListener(new ItemListener() {
@@ -214,7 +222,9 @@ public class CadastroTransacao extends JFrame {
 		textDataUtil.setEnabled(false);
 		textDataUtil.setVisible(false);
 		if ((operacao == "Alterar")
-				&& (!linha.getCell(1).getDateCellValue().toString().isEmpty())) {
+				&& (!linha.getCell(1).getDateCellValue().toString().isEmpty())
+				&& (TransacaoController.seTransaCartao(linha.getCell(5)
+						.getStringCellValue()) == null)) {
 			c.setTime(linha.getCell(1).getDateCellValue());
 			textDataUtil.setText(DataController.calendarToString(c));
 			textDataUtil.setVisible(true);
@@ -230,9 +240,9 @@ public class CadastroTransacao extends JFrame {
 		formattedTextValor.setBounds(90, 83, 180, 20);
 		contentPane.add(formattedTextValor);
 		if ((operacao == "Alterar")
-				&& (linha.getCell(3).getNumericCellValue() != 0)) {
+				&& (linha.getCell(4).getNumericCellValue() != 0)) {
 			formattedTextValor.setText(DinheiroController
-					.dinheiroToString(linha.getCell(3).getNumericCellValue()));
+					.dinheiroToString(linha.getCell(4).getNumericCellValue()));
 		}
 
 		rdbtnCartaoSim.addItemListener(new ItemListener() {
