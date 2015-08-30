@@ -77,3 +77,6 @@ local.properties
 
 # txtdagal
 *.txt
+
+# generated xlsx
+Pasta1.xlsx
