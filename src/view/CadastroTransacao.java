@@ -344,6 +344,7 @@ public class CadastroTransacao extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String dataCalculada = formattedTextData.getText();
+				String dataReal = formattedTextData.getText();
 				if ((textDescricao.getText().isEmpty())
 						|| (comboCategoria.getSelectedItem() == null)
 						|| (formattedTextData.getText().isEmpty())
@@ -417,10 +418,11 @@ public class CadastroTransacao extends JFrame {
 									transacao.data = DataController
 											.primeiroDiaUtilDepoisDe(transacao.data);
 								}
-								TransacaoController.cadastrar(
-										transacao,
-										DataController
-												.calendarToString(transacao.data));
+								c = transacao.data;
+								transacao.data = DataController
+										.stringToCalendar(dataReal);
+								TransacaoController.cadastrar(transacao,
+										DataController.calendarToString(c));
 							}
 						} else {
 							if (chckbxApenasDiaUtil.isSelected()
