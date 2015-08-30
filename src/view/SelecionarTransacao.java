@@ -305,9 +305,9 @@ public class SelecionarTransacao extends JFrame {
 												.toString())));
 						JOptionPane.showMessageDialog(null,
 								"Operação realizada com sucesso!");
-						dispose();
 					}
 				}
+				dispose();
 			}
 		});
 

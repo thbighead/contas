@@ -73,7 +73,6 @@ public class CadastroCategoria extends JFrame {
 							.getText());
 					JOptionPane.showMessageDialog(null,
 							"Operação realizada com sucesso!");
-					dispose();
 				}
 			}
 		});

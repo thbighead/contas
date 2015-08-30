@@ -150,6 +150,7 @@ public class SelecionarCartao extends JFrame {
 						comboCartao.setVisible(true);
 					}
 				}
+				dispose();
 			}
 		});
 

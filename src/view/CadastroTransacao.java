@@ -435,7 +435,6 @@ public class CadastroTransacao extends JFrame {
 					}
 					JOptionPane.showMessageDialog(null,
 							"Operação realizada com sucesso!");
-					dispose();
 				}
 			}
 		});
