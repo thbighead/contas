@@ -1,4 +1,4 @@
-// versao 1.1
+// versao 1.2
 package view; 
 
 import java.awt.EventQueue;
