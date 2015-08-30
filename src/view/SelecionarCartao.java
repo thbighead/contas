@@ -142,7 +142,12 @@ public class SelecionarCartao extends JFrame {
 										.toString()));
 						JOptionPane.showMessageDialog(null,
 								"Operação realizada com sucesso!");
-						dispose();
+						comboCartao.setVisible(false);
+						comboCartao = new JComboBox<String>(CartaoController.listar(diaVirada,
+								diaVencimento));
+						comboCartao.setBounds(134, 8, 180, 20);
+						contentPane.add(comboCartao);
+						comboCartao.setVisible(true);
 					}
 				}
 			}
