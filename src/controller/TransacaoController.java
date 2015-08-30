@@ -214,7 +214,6 @@ public class TransacaoController {
 					+ row.getCell(5).getStringCellValue() + " "
 					+ row.getCell(4).getStringCellValue() + " "
 					+ row.getCell(3).getNumericCellValue();
-			System.out.println(transacao);
 			transacoes.add(transacao);
 			i++;
 			row = planilhaPasta.getRow(i);

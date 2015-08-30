@@ -45,6 +45,7 @@ public class CadastroTransacao extends JFrame {
 	private static final long serialVersionUID = 1219072088014815979L;
 	private JPanel contentPane;
 	private JTextField textDescricao;
+	JCheckBox chckbxApenasDiaUtil;
 	private JFormattedTextField formattedTextQuantasVezes;
 	private JFormattedTextField formattedTextData;
 	private JTextField textDataUtil;
@@ -54,11 +55,13 @@ public class CadastroTransacao extends JFrame {
 			if (!formattedTextData.getText().contains("_")) {
 				formattedTextData.setText(DataController
 						.formataData(formattedTextData.getText()));
-				textDataUtil.setText(DataController
-						.calendarToString(DataController
-								.primeiroDiaUtilDepoisDe(DataController
-										.stringToCalendar(formattedTextData
-												.getText()))));
+				if (chckbxApenasDiaUtil.isSelected()) {
+					textDataUtil.setText(DataController
+							.calendarToString(DataController
+									.primeiroDiaUtilDepoisDe(DataController
+											.stringToCalendar(formattedTextData
+													.getText()))));
+				}
 			}
 		}
 
@@ -67,6 +70,7 @@ public class CadastroTransacao extends JFrame {
 		}
 	};
 	private JFormattedTextField formattedTextValor;
+	Calendar c = Calendar.getInstance();
 
 	/**
 	 * Launch the application.
@@ -91,8 +95,6 @@ public class CadastroTransacao extends JFrame {
 	 * Create the frame.
 	 */
 	public CadastroTransacao(String operacao, XSSFRow linha) {
-		Calendar c = Calendar.getInstance();
-
 		setTitle(operacao + " transação");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 200);
@@ -149,7 +151,37 @@ public class CadastroTransacao extends JFrame {
 			formattedTextData.setText(DataController.calendarToString(c));
 		}
 
-		JCheckBox chckbxApenasDiaUtil = new JCheckBox("Apenas Dia Útil");
+		JLabel lblCartao = new JLabel("Cartão?");
+		lblCartao.setBounds(299, 11, 46, 14);
+		contentPane.add(lblCartao);
+
+		JRadioButton rdbtnCartaoSim = new JRadioButton("Sim");
+		rdbtnCartaoSim.setBounds(351, 7, 55, 23);
+		contentPane.add(rdbtnCartaoSim);
+
+		JRadioButton rdbtnCartaoNao = new JRadioButton("Não");
+		rdbtnCartaoNao.setBounds(408, 7, 55, 23);
+		contentPane.add(rdbtnCartaoNao);
+
+		ButtonGroup groupCartaoSN = new ButtonGroup();
+		groupCartaoSN.add(rdbtnCartaoSim);
+		groupCartaoSN.add(rdbtnCartaoNao);
+
+		JComboBox<String> comboCartao = new JComboBox<String>(
+				CartaoController.listar(0, 0));
+		comboCartao.setBounds(469, 8, 145, 20);
+		contentPane.add(comboCartao);
+		comboCartao.setVisible(false);
+		if ((operacao == "Alterar")
+				&& (!linha.getCell(4).getStringCellValue().isEmpty())
+				&& (TransacaoController.seTransaCartao(linha.getCell(4)
+						.getStringCellValue()) != null)) {
+			comboCartao.setVisible(true);
+			comboCartao.setSelectedItem(TransacaoController
+					.seTransaCartao(linha.getCell(4).getStringCellValue()));
+		}
+
+		chckbxApenasDiaUtil = new JCheckBox("Apenas Dia Útil");
 		chckbxApenasDiaUtil.setBounds(276, 57, 115, 23);
 		contentPane.add(chckbxApenasDiaUtil);
 		if ((operacao == "Alterar")
@@ -160,6 +192,8 @@ public class CadastroTransacao extends JFrame {
 			public void itemStateChanged(ItemEvent event) {
 				int state = event.getStateChange();
 				if (state == ItemEvent.SELECTED) {
+					groupCartaoSN.setSelected(rdbtnCartaoNao.getModel(), true);
+					comboCartao.setSelectedItem(null);
 					textDataUtil.setVisible(true);
 					if (!formattedTextData.getText().contains("_")) {
 						textDataUtil.setText(DataController.calendarToString(DataController
@@ -201,41 +235,13 @@ public class CadastroTransacao extends JFrame {
 					.dinheiroToString(linha.getCell(3).getNumericCellValue()));
 		}
 
-		JLabel lblCartao = new JLabel("Cartão?");
-		lblCartao.setBounds(299, 11, 46, 14);
-		contentPane.add(lblCartao);
-
-		JRadioButton rdbtnCartaoSim = new JRadioButton("Sim");
-		rdbtnCartaoSim.setBounds(351, 7, 55, 23);
-		contentPane.add(rdbtnCartaoSim);
-
-		JRadioButton rdbtnCartaoNao = new JRadioButton("Não");
-		rdbtnCartaoNao.setBounds(408, 7, 55, 23);
-		contentPane.add(rdbtnCartaoNao);
-
-		ButtonGroup groupCartaoSN = new ButtonGroup();
-		groupCartaoSN.add(rdbtnCartaoSim);
-		groupCartaoSN.add(rdbtnCartaoNao);
-
-		JComboBox<String> comboCartao = new JComboBox<String>(
-				CartaoController.listar(0, 0));
-		comboCartao.setBounds(469, 8, 145, 20);
-		contentPane.add(comboCartao);
-		comboCartao.setVisible(false);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(4).getStringCellValue().isEmpty())
-				&& (TransacaoController.seTransaCartao(linha.getCell(4)
-						.getStringCellValue()) != null)) {
-			comboCartao.setVisible(true);
-			comboCartao.setSelectedItem(TransacaoController
-					.seTransaCartao(linha.getCell(4).getStringCellValue()));
-		}
-
 		rdbtnCartaoSim.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent event) {
 				int state = event.getStateChange();
 				if (state == ItemEvent.SELECTED) {
 					comboCartao.setVisible(true);
+					chckbxApenasDiaUtil.setSelected(false);
+					textDataUtil.setText("");
 				} else if (state == ItemEvent.DESELECTED) {
 					comboCartao.setSelectedIndex(0);
 					comboCartao.setVisible(false);
@@ -327,6 +333,7 @@ public class CadastroTransacao extends JFrame {
 		contentPane.add(btnSalvar);
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String dataCalculada = formattedTextData.getText();
 				if ((textDescricao.getText().isEmpty())
 						|| (comboCategoria.getSelectedItem() == null)
 						|| (formattedTextData.getText().isEmpty())
@@ -356,9 +363,12 @@ public class CadastroTransacao extends JFrame {
 													.getSelectedItem()
 													.toString()));
 							nova.transaCartao(card);
+							c = nova.data;
+							nova.data = DataController
+									.stringToCalendar(dataCalculada);
+							dataCalculada = DataController.calendarToString(c);
 						}
-						TransacaoController.alterar(linha, nova,
-								textDataUtil.getText());
+						TransacaoController.alterar(linha, nova, dataCalculada);
 					} else {
 						if ((comboCartao.getSelectedItem() != null)
 								&& (groupCartaoSN.isSelected(rdbtnCartaoSim
@@ -369,23 +379,48 @@ public class CadastroTransacao extends JFrame {
 													.getSelectedItem()
 													.toString()));
 							nova.transaCartao(card);
+							c = nova.data;
+							nova.data = DataController
+									.stringToCalendar(dataCalculada);
+							dataCalculada = DataController.calendarToString(c);
 						}
 
 						if ((Integer.parseInt(formattedTextQuantasVezes
 								.getText()) > 1)
 								&& (!formattedTextQuantasVezes.getText()
 										.isEmpty())) {
+							nova.data = DataController
+									.stringToCalendar(dataCalculada);
+							if (chckbxApenasDiaUtil.isSelected()
+									&& !textDataUtil.getText().isEmpty()) {
+								nova.data = DataController
+										.stringToCalendar(textDataUtil
+												.getText());
+							}
 							Transacao[] transacoes = nova.parcelar(Integer
 									.parseInt(formattedTextQuantasVezes
 											.getText()));
 
 							for (Transacao transacao : transacoes) {
-								TransacaoController.cadastrar(transacao,
-										textDataUtil.getText());
+								if (chckbxApenasDiaUtil.isSelected()
+										&& !textDataUtil.getText().isEmpty()) {
+									transacao.data = DataController
+											.primeiroDiaUtilDepoisDe(transacao.data);
+								}
+								TransacaoController.cadastrar(
+										transacao,
+										DataController
+												.calendarToString(transacao.data));
 							}
 						} else {
-							TransacaoController.cadastrar(nova,
-									textDataUtil.getText());
+							if (chckbxApenasDiaUtil.isSelected()
+									&& !textDataUtil.getText().isEmpty()) {
+								TransacaoController.cadastrar(nova,
+										textDataUtil.getText());
+							} else {
+								TransacaoController.cadastrar(nova,
+										dataCalculada);
+							}
 						}
 					}
 					JOptionPane.showMessageDialog(null,
