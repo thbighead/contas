@@ -126,7 +126,7 @@ public class SelecionarTransacao extends JFrame {
 		contentPane.add(lblFiltros);
 
 		JComboBox<String> comboData = new JComboBox<String>(
-				DataController.listar());
+				DataController.listar(null));
 		comboData.setBounds(66, 33, 115, 20);
 		contentPane.add(comboData);
 		comboData.addActionListener(new ActionListener() {

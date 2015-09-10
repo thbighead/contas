@@ -58,7 +58,7 @@ public class CadastroTransacao extends JFrame {
 				if (chckbxApenasDiaUtil.isSelected()) {
 					textDataUtil.setText(DataController
 							.calendarToString(DataController
-									.primeiroDiaUtilDepoisDe(DataController
+									.primeiroDiaUtilAPartirDe(DataController
 											.stringToCalendar(formattedTextData
 													.getText()))));
 				}
@@ -205,7 +205,7 @@ public class CadastroTransacao extends JFrame {
 					textDataUtil.setVisible(true);
 					if (!formattedTextData.getText().contains("_")) {
 						textDataUtil.setText(DataController.calendarToString(DataController
-								.primeiroDiaUtilDepoisDe(DataController
+								.primeiroDiaUtilAPartirDe(DataController
 										.stringToCalendar(formattedTextData
 												.getText()))));
 					}
@@ -416,7 +416,7 @@ public class CadastroTransacao extends JFrame {
 								if (chckbxApenasDiaUtil.isSelected()
 										&& !textDataUtil.getText().isEmpty()) {
 									transacao.data = DataController
-											.primeiroDiaUtilDepoisDe(transacao.data);
+											.primeiroDiaUtilAPartirDe(transacao.data);
 								}
 								c = transacao.data;
 								transacao.data = DataController
