@@ -1,5 +1,5 @@
-// versao 1.2
-package view; 
+// versao 1.3
+package view;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 
 public class Home extends JFrame {
+	/**
+	 * Todas as janelas que podem ser construidas
+	 */
 	private CadastroTransacao cadastrarNovaTransacao = null;
 	private SelecionarTransacao selectTransacaoAlterar = null,
 			selectTransacaoExcluir = null;
@@ -21,10 +24,10 @@ public class Home extends JFrame {
 	private ExcluirCategoria selectCategoriaExcluir = null;
 
 	/**
-	 * 
+	 * VERSAO
 	 */
 	private static final long serialVersionUID = -7286910487129241658L;
-	private static final String version = "1.2";
+	private static final String version = "1.3";
 	private JPanel contentPane;
 
 	/**
