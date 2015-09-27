@@ -24,6 +24,7 @@ public class Home extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -7286910487129241658L;
+	private static final String version = "1.2";
 	private JPanel contentPane;
 
 	/**
@@ -46,7 +47,7 @@ public class Home extends JFrame {
 	 * Create the frame.
 	 */
 	public Home() {
-		setTitle("Contas Manager");
+		setTitle("Contas " + version);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 570, 155);
 		contentPane = new JPanel();
@@ -54,6 +55,7 @@ public class Home extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		// Transacao
 		JButton btnNovaTransacao = new JButton("Nova Transação");
 		btnNovaTransacao.setBounds(10, 11, 140, 23);
 		contentPane.add(btnNovaTransacao);
@@ -91,6 +93,7 @@ public class Home extends JFrame {
 			}
 		});
 
+		// Cartao
 		JButton btnCadastrarNovoCartao = new JButton("Cadastrar Novo Cartão");
 		btnCadastrarNovoCartao.setBounds(170, 11, 170, 23);
 		contentPane.add(btnCadastrarNovoCartao);
@@ -127,6 +130,7 @@ public class Home extends JFrame {
 			}
 		});
 
+		// Categoria
 		JButton btnCadastrarNovaCategoria = new JButton(
 				"Cadastrar Nova Categoria");
 		btnCadastrarNovaCategoria.setBounds(359, 11, 185, 23);

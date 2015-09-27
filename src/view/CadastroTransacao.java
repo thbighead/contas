@@ -9,8 +9,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Calendar;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -44,11 +42,30 @@ public class CadastroTransacao extends JFrame {
 	 */
 	private static final long serialVersionUID = 1219072088014815979L;
 	private JPanel contentPane;
+	/**
+	 * Components
+	 */
 	private JTextField textDescricao;
-	JCheckBox chckbxApenasDiaUtil;
+	private JCheckBox chckbxApenasDiaUtil;
 	private JFormattedTextField formattedTextQuantasVezes;
 	private JFormattedTextField formattedTextData;
 	private JTextField textDataUtil;
+	private JFormattedTextField formattedTextValor;
+	private JComboBox<String> comboCategoria;
+	private JRadioButton rdbtnCartaoSim;
+	private JRadioButton rdbtnCartaoNao;
+	private ButtonGroup groupCartaoSN;
+	private JComboBox<String> comboCartao;
+	private JRadioButton rdbtnParceladoSim;
+	private JRadioButton rdbtnParceladoNao;
+	private ButtonGroup groupParceladoSN;
+	private JLabel lblParcelado;
+	/**
+	 * Define o que acontece quando o campo de data perde o foco: ao perde-lo,
+	 * testa se o campo ainda tem algum caractere em branco (algum "_"), caso
+	 * nao tenha, formata a data e testa se a opcao de "Apenas dia util" estah
+	 * selecionada para gerar a data para o campo de dataUtil
+	 */
 	private FocusListener dataFocusListener = new FocusListener() {
 		@Override
 		public void focusLost(FocusEvent e) {
@@ -57,10 +74,8 @@ public class CadastroTransacao extends JFrame {
 						.formataData(formattedTextData.getText()));
 				if (chckbxApenasDiaUtil.isSelected()) {
 					textDataUtil.setText(DataController
-							.calendarToString(DataController
-									.primeiroDiaUtilAPartirDe(DataController
-											.stringToCalendar(formattedTextData
-													.getText()))));
+							.primeiroDiaUtilAPartirDe(formattedTextData
+									.getText()));
 				}
 			}
 		}
@@ -69,8 +84,6 @@ public class CadastroTransacao extends JFrame {
 		public void focusGained(FocusEvent e) {
 		}
 	};
-	private JFormattedTextField formattedTextValor;
-	Calendar c = Calendar.getInstance();
 
 	/**
 	 * Launch the application.
@@ -95,7 +108,10 @@ public class CadastroTransacao extends JFrame {
 	 * Create the frame.
 	 */
 	public CadastroTransacao(String operacao, XSSFRow linha) {
-		setTitle(operacao + " transação");
+		/**
+		 * Setting the window
+		 */
+		setTitle(operacao + " transação"); // define a operacao como titulo
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 200);
 		contentPane = new JPanel();
@@ -103,6 +119,7 @@ public class CadastroTransacao extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		// Descricao da transacao
 		JLabel lblDescricao = new JLabel("Descrição:");
 		lblDescricao.setBounds(10, 11, 70, 14);
 		contentPane.add(lblDescricao);
@@ -111,30 +128,18 @@ public class CadastroTransacao extends JFrame {
 		textDescricao.setBounds(90, 8, 180, 20);
 		contentPane.add(textDescricao);
 		textDescricao.setColumns(10);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(5).getStringCellValue().isEmpty())) {
-			String getDescricao = linha.getCell(5).getStringCellValue();
-			if (TransacaoController.seTransaCartao(getDescricao) != null) {
-				getDescricao = getDescricao
-						.substring(getDescricao.indexOf("-") + 1);
-			}
-			textDescricao.setText(getDescricao);
-		}
 
+		// Categoria da transacao
 		JLabel lblCategoria = new JLabel("Categoria:");
 		lblCategoria.setBounds(10, 36, 70, 14);
 		contentPane.add(lblCategoria);
 
-		JComboBox<String> comboCategoria = new JComboBox<String>(
+		comboCategoria = new JComboBox<String>(
 				TransacaoController.listarCategorias());
 		comboCategoria.setBounds(90, 33, 180, 20);
 		contentPane.add(comboCategoria);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(6).getStringCellValue().isEmpty())) {
-			comboCategoria.setSelectedItem(linha.getCell(6)
-					.getStringCellValue());
-		}
 
+		// Data real da transacao
 		JLabel lblData = new JLabel("Data:");
 		lblData.setBounds(10, 61, 46, 14);
 		contentPane.add(lblData);
@@ -150,52 +155,33 @@ public class CadastroTransacao extends JFrame {
 		formattedTextData.setBounds(90, 58, 180, 20);
 		contentPane.add(formattedTextData);
 		formattedTextData.addFocusListener(dataFocusListener);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(0).getDateCellValue().toString().isEmpty())) {
-			c.setTime(linha.getCell(0).getDateCellValue());
-			formattedTextData.setText(DataController.calendarToString(c));
-		}
 
+		// Possivel cartao usado na transacao
 		JLabel lblCartao = new JLabel("Cartão?");
 		lblCartao.setBounds(299, 11, 46, 14);
 		contentPane.add(lblCartao);
 
-		JRadioButton rdbtnCartaoSim = new JRadioButton("Sim");
+		rdbtnCartaoSim = new JRadioButton("Sim");
 		rdbtnCartaoSim.setBounds(351, 7, 55, 23);
 		contentPane.add(rdbtnCartaoSim);
 
-		JRadioButton rdbtnCartaoNao = new JRadioButton("Não");
+		rdbtnCartaoNao = new JRadioButton("Não");
 		rdbtnCartaoNao.setBounds(408, 7, 55, 23);
 		contentPane.add(rdbtnCartaoNao);
 
-		ButtonGroup groupCartaoSN = new ButtonGroup();
+		groupCartaoSN = new ButtonGroup();
 		groupCartaoSN.add(rdbtnCartaoSim);
 		groupCartaoSN.add(rdbtnCartaoNao);
 
-		JComboBox<String> comboCartao = new JComboBox<String>(
-				CartaoController.listar(0, 0));
+		comboCartao = new JComboBox<String>(CartaoController.listar(0, 0));
 		comboCartao.setBounds(469, 8, 145, 20);
 		contentPane.add(comboCartao);
 		comboCartao.setVisible(false);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(5).getStringCellValue().isEmpty())
-				&& (TransacaoController.seTransaCartao(linha.getCell(5)
-						.getStringCellValue()) != null)) {
-			groupCartaoSN.setSelected(rdbtnCartaoSim.getModel(), true);
-			comboCartao.setVisible(true);
-			comboCartao.setSelectedItem(TransacaoController
-					.seTransaCartao(linha.getCell(5).getStringCellValue()));
-		}
 
+		// Possivel geracao de data efetiva somente em dias uteis
 		chckbxApenasDiaUtil = new JCheckBox("Apenas Dia Útil");
 		chckbxApenasDiaUtil.setBounds(276, 57, 115, 23);
 		contentPane.add(chckbxApenasDiaUtil);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(1).getDateCellValue().toString().isEmpty())
-				&& (TransacaoController.seTransaCartao(linha.getCell(5)
-						.getStringCellValue()) == null)) {
-			chckbxApenasDiaUtil.setSelected(true);
-		}
 		chckbxApenasDiaUtil.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent event) {
 				int state = event.getStateChange();
@@ -204,10 +190,9 @@ public class CadastroTransacao extends JFrame {
 					comboCartao.setSelectedItem(null);
 					textDataUtil.setVisible(true);
 					if (!formattedTextData.getText().contains("_")) {
-						textDataUtil.setText(DataController.calendarToString(DataController
-								.primeiroDiaUtilAPartirDe(DataController
-										.stringToCalendar(formattedTextData
-												.getText()))));
+						textDataUtil.setText(DataController
+								.primeiroDiaUtilAPartirDe(formattedTextData
+										.getText()));
 					}
 				} else if (state == ItemEvent.DESELECTED) {
 					textDataUtil.setVisible(false);
@@ -221,15 +206,8 @@ public class CadastroTransacao extends JFrame {
 		textDataUtil.setColumns(10);
 		textDataUtil.setEnabled(false);
 		textDataUtil.setVisible(false);
-		if ((operacao == "Alterar")
-				&& (!linha.getCell(1).getDateCellValue().toString().isEmpty())
-				&& (TransacaoController.seTransaCartao(linha.getCell(5)
-						.getStringCellValue()) == null)) {
-			c.setTime(linha.getCell(1).getDateCellValue());
-			textDataUtil.setText(DataController.calendarToString(c));
-			textDataUtil.setVisible(true);
-		}
 
+		// Valor da transacao
 		JLabel lblValor = new JLabel("Valor:");
 		lblValor.setBounds(10, 86, 46, 14);
 		contentPane.add(lblValor);
@@ -239,11 +217,6 @@ public class CadastroTransacao extends JFrame {
 		formattedTextValor = new JFormattedTextField(fmtValor);
 		formattedTextValor.setBounds(90, 83, 180, 20);
 		contentPane.add(formattedTextValor);
-		if ((operacao == "Alterar")
-				&& (linha.getCell(4).getNumericCellValue() != 0)) {
-			formattedTextValor.setText(DinheiroController
-					.dinheiroToString(linha.getCell(4).getNumericCellValue()));
-		}
 
 		rdbtnCartaoSim.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent event) {
@@ -259,28 +232,20 @@ public class CadastroTransacao extends JFrame {
 			}
 		});
 
-		JLabel lblParcelado = new JLabel("Parcelado?");
+		// Possivel geracao automatica para dividir a transacao em parcelas
+		lblParcelado = new JLabel("Parcelado?");
 		lblParcelado.setBounds(280, 86, 65, 14);
 		contentPane.add(lblParcelado);
-		if (operacao.equals("Alterar")) {
-			lblParcelado.setVisible(false);
-		}
 
-		JRadioButton rdbtnParceladoSim = new JRadioButton("Sim");
+		rdbtnParceladoSim = new JRadioButton("Sim");
 		rdbtnParceladoSim.setBounds(351, 82, 55, 23);
 		contentPane.add(rdbtnParceladoSim);
-		if (operacao.equals("Alterar")) {
-			rdbtnParceladoSim.setVisible(false);
-		}
 
-		JRadioButton rdbtnParceladoNao = new JRadioButton("Não");
+		rdbtnParceladoNao = new JRadioButton("Não");
 		rdbtnParceladoNao.setBounds(408, 82, 55, 23);
 		contentPane.add(rdbtnParceladoNao);
-		if (operacao.equals("Alterar")) {
-			rdbtnParceladoNao.setVisible(false);
-		}
 
-		ButtonGroup groupParceladoSN = new ButtonGroup();
+		groupParceladoSN = new ButtonGroup();
 		groupParceladoSN.add(rdbtnParceladoSim);
 		groupParceladoSN.add(rdbtnParceladoNao);
 
@@ -316,25 +281,16 @@ public class CadastroTransacao extends JFrame {
 			}
 		});
 
+		// Alterar?
+		alterarLoad(operacao, linha);
+
+		// Botoes
 		JButton btnLimpar = new JButton("Limpar");
 		btnLimpar.setBounds(10, 130, 89, 23);
 		contentPane.add(btnLimpar);
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textDescricao.setText("");
-				comboCategoria.setSelectedItem(null);
-				formattedTextData.setText("");
-				formattedTextValor.setText("");
-				groupCartaoSN.clearSelection();
-				comboCartao.setSelectedIndex(0);
-				comboCartao.setVisible(false);
-				groupParceladoSN.clearSelection();
-				chckbxApenasDiaUtil.setSelected(false);
-				textDataUtil.setText("");
-				textDataUtil.setVisible(false);
-				lblQuantasVezes.setVisible(false);
-				formattedTextQuantasVezes.setText("");
-				formattedTextQuantasVezes.setVisible(false);
+				limparCampos(lblQuantasVezes);
 			}
 		});
 
@@ -343,100 +299,72 @@ public class CadastroTransacao extends JFrame {
 		contentPane.add(btnSalvar);
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String dataCalculada = formattedTextData.getText();
-				String dataReal = formattedTextData.getText();
-				if ((textDescricao.getText().isEmpty())
-						|| (comboCategoria.getSelectedItem() == null)
-						|| (formattedTextData.getText().isEmpty())
-						|| (formattedTextValor.getText().isEmpty())
-						|| ((groupParceladoSN.isSelected(rdbtnParceladoSim
-								.getModel())) && (formattedTextQuantasVezes
-								.getText().isEmpty()))
-						|| ((groupCartaoSN.isSelected(rdbtnCartaoSim.getModel()) && (comboCartao
-								.getSelectedItem() == null)))) {
-					JOptionPane.showMessageDialog(null,
-							"Preencha os campos em branco");
+				if (seAlgumCampoEmBranco()) {
+					alertMessage("Preencha os campos em branco");
 				} else {
+					/**
+					 * Monta a nova transacao, seja para cadastrar ou para
+					 * alterar. Ateh esse momento as datas real e efetiva sao a
+					 * mesma (a real)
+					 */
 					Transacao nova = new Transacao(comboCategoria
 							.getSelectedItem().toString(), textDescricao
 							.getText(), formattedTextData.getText(),
-							DinheiroController
+							formattedTextData.getText(), DinheiroController
 									.stringToDinheiro(formattedTextValor
 											.getText()));
 
 					if (operacao.equals("Alterar")) {
-						if ((comboCartao.getSelectedItem() != null)
-								&& (groupCartaoSN.isSelected(rdbtnCartaoSim
-										.getModel()))) {
+						if (ehDeCartao()) {
 							Cartao card = CartaoController
 									.getCartao(CartaoController
 											.buscar(comboCartao
 													.getSelectedItem()
 													.toString()));
 							nova.transaCartao(card);
-							c = nova.data;
-							nova.data = DataController
-									.stringToCalendar(dataCalculada);
-							dataCalculada = DataController.calendarToString(c);
 						}
-						TransacaoController.alterar(linha, nova, dataCalculada);
+						// altera
+						TransacaoController.alterar(linha, nova);
 					} else {
-						if ((comboCartao.getSelectedItem() != null)
-								&& (groupCartaoSN.isSelected(rdbtnCartaoSim
-										.getModel()))) {
+						if (ehParcelado() && ehDeCartao()) {
+							/**
+							 * Monta o cartao selecionado
+							 */
+							Cartao card = CartaoController
+									.getCartao(comboCartao.getSelectedItem()
+											.toString());
+							nova.transaCartaoParcelada(card,
+									formattedTextQuantasVezes.getText());
+						} else if (!ehParcelado() && ehDeCartao()) {
+							/**
+							 * Monta o cartao selecionado
+							 */
 							Cartao card = CartaoController
 									.getCartao(CartaoController
 											.buscar(comboCartao
 													.getSelectedItem()
 													.toString()));
 							nova.transaCartao(card);
-							c = nova.data;
-							nova.data = DataController
-									.stringToCalendar(dataCalculada);
-							dataCalculada = DataController.calendarToString(c);
-						}
-
-						if ((Integer.parseInt(formattedTextQuantasVezes
-								.getText()) > 1)
-								&& (!formattedTextQuantasVezes.getText()
-										.isEmpty())) {
-							nova.data = DataController
-									.stringToCalendar(dataCalculada);
-							if (chckbxApenasDiaUtil.isSelected()
-									&& !textDataUtil.getText().isEmpty()) {
-								nova.data = DataController
+						} else if (ehParcelado() && !ehDeCartao()) {
+							nova.parcelar(formattedTextQuantasVezes.getText());
+						} else {
+							if (ehApenasDeDiasUteis()) {
+								nova.dataEfetiva = DataController
 										.stringToCalendar(textDataUtil
 												.getText());
 							}
-							Transacao[] transacoes = nova.parcelar(Integer
-									.parseInt(formattedTextQuantasVezes
-											.getText()));
-
-							for (Transacao transacao : transacoes) {
-								if (chckbxApenasDiaUtil.isSelected()
-										&& !textDataUtil.getText().isEmpty()) {
-									transacao.data = DataController
-											.primeiroDiaUtilAPartirDe(transacao.data);
-								}
-								c = transacao.data;
-								transacao.data = DataController
-										.stringToCalendar(dataReal);
-								TransacaoController.cadastrar(transacao,
-										DataController.calendarToString(c));
-							}
-						} else {
-							if (chckbxApenasDiaUtil.isSelected()
-									&& !textDataUtil.getText().isEmpty()) {
-								TransacaoController.cadastrar(nova,
-										textDataUtil.getText());
-							} else {
-								TransacaoController.cadastrar(nova,
-										dataCalculada);
-							}
+							// cadastra
+							TransacaoController.cadastrar(nova);
 						}
 					}
-					JOptionPane.showMessageDialog(null,
-							"Operação realizada com sucesso!");
+
+					TransacaoController.recarregarPasta(); // recarrega a pasta
+					alertMessage("Operação realizada com sucesso!");
+					// depois de alterar nao tem pq manter a janela
+					if (operacao.equals("Alterar")) {
+						limparCampos(lblQuantasVezes);
+						dispose();
+					}
 				}
 			}
 		});
@@ -449,5 +377,123 @@ public class CadastroTransacao extends JFrame {
 				dispose();
 			}
 		});
+	}
+
+	/**
+	 * Verdadeiro se a transacao setada for parcelada
+	 */
+	private boolean ehParcelado() {
+		return (Integer.parseInt(formattedTextQuantasVezes.getText()) > 1)
+				&& (groupParceladoSN.isSelected(rdbtnParceladoSim.getModel()));
+	}
+
+	/**
+	 * Verdadeiro se a transacao setada for de cartao
+	 */
+	private boolean ehDeCartao() {
+		return (comboCartao.getSelectedItem() != null)
+				&& (groupCartaoSN.isSelected(rdbtnCartaoSim.getModel()));
+	}
+
+	/**
+	 * Mostra mensagem de alerta com a opcao "OK"
+	 */
+	private void alertMessage(String message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
+
+	/**
+	 * Carrega dados caso seja uma operacao de alteracao
+	 */
+	private void alterarLoad(String operacao, XSSFRow linha) {
+		if (operacao.equals("Alterar")) {
+			// Recupera a data real da transacao
+			String dataReal;
+			if (!(dataReal = linha.getCell(0).getDateCellValue().toString())
+					.isEmpty()) {
+				formattedTextData.setText(dataReal);
+			}
+			// Recupera a descricao da transacao
+			String descricao;
+			if (!(descricao = linha.getCell(5).getStringCellValue()).isEmpty()) {
+				String dataEfetiva = linha.getCell(1).getDateCellValue()
+						.toString();
+				// Recupera o cartao usado na transacao
+				String cartao;
+				if ((cartao = TransacaoController.seTransaCartao(descricao)) != null) {
+					descricao = descricao.substring(descricao.indexOf("-") + 1);
+					groupCartaoSN.setSelected(rdbtnCartaoSim.getModel(), true);
+					comboCartao.setSelectedItem(cartao);
+					comboCartao.setVisible(true);
+				} else if (!TransacaoController.seTransParcelada(descricao)
+						&& !dataReal.equals(dataEfetiva)) {
+					// Recupera a data efetiva da transacao
+					chckbxApenasDiaUtil.setSelected(true);
+					textDataUtil.setText(dataEfetiva);
+					textDataUtil.setVisible(true);
+				}
+				textDescricao.setText(descricao);
+			}
+			// Recupera a categoria da transacao
+			String categoria;
+			if (!(categoria = linha.getCell(6).getStringCellValue()).isEmpty()) {
+				comboCategoria.setSelectedItem(categoria);
+			}
+			// Recupera o valor da transacao
+			double valor;
+			if ((valor = linha.getCell(4).getNumericCellValue()) != 0) {
+				formattedTextValor.setText(DinheiroController
+						.dinheiroToString(valor));
+			}
+			/**
+			 * Alteracao nao manipula todas as parcelas ao mesmo tempo, cada
+			 * parcela deve ser alterada como uma transacao individual
+			 */
+			lblParcelado.setVisible(false);
+			rdbtnParceladoSim.setVisible(false);
+			rdbtnParceladoNao.setVisible(false);
+		}
+	}
+
+	/**
+	 * Limpa todos os campos da janela
+	 */
+	private void limparCampos(JLabel lblQuantasVezes) {
+		textDescricao.setText("");
+		comboCategoria.setSelectedItem(null);
+		formattedTextData.setText("");
+		formattedTextValor.setText("");
+		groupCartaoSN.clearSelection();
+		comboCartao.setSelectedIndex(0);
+		comboCartao.setVisible(false);
+		groupParceladoSN.clearSelection();
+		chckbxApenasDiaUtil.setSelected(false);
+		textDataUtil.setText("");
+		textDataUtil.setVisible(false);
+		lblQuantasVezes.setVisible(false);
+		formattedTextQuantasVezes.setText("");
+		formattedTextQuantasVezes.setVisible(false);
+	}
+
+	/**
+	 * Testa se tem algum campo obrigatorio em branco
+	 */
+	private boolean seAlgumCampoEmBranco() {
+		return (textDescricao.getText().isEmpty())
+				|| (comboCategoria.getSelectedItem() == null)
+				|| (formattedTextData.getText().isEmpty())
+				|| (formattedTextValor.getText().isEmpty())
+				|| ((groupParceladoSN.isSelected(rdbtnParceladoSim.getModel())) && (formattedTextQuantasVezes
+						.getText().isEmpty()))
+				|| ((groupCartaoSN.isSelected(rdbtnCartaoSim.getModel()) && (comboCartao
+						.getSelectedItem() == null)));
+	}
+
+	/**
+	 * Verdadeiro se a transacao setada for apenas de dias uteis
+	 */
+	private boolean ehApenasDeDiasUteis() {
+		return chckbxApenasDiaUtil.isSelected()
+				&& !textDataUtil.getText().isEmpty();
 	}
 }

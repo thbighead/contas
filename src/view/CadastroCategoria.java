@@ -51,6 +51,7 @@ public class CadastroCategoria extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		// Nome da Categoria
 		JLabel lblNomeDaCategoria = new JLabel("Nome da Categoria:");
 		lblNomeDaCategoria.setBounds(10, 11, 120, 14);
 		contentPane.add(lblNomeDaCategoria);
@@ -60,6 +61,7 @@ public class CadastroCategoria extends JFrame {
 		contentPane.add(textCategoria);
 		textCategoria.setColumns(10);
 
+		// Botoes
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.setBounds(85, 39, 89, 23);
 		contentPane.add(btnSalvar);
@@ -71,6 +73,7 @@ public class CadastroCategoria extends JFrame {
 				} else {
 					TransacaoController.cadastrarCategoria(textCategoria
 							.getText());
+					TransacaoController.recarregarBase();
 					JOptionPane.showMessageDialog(null,
 							"Operação realizada com sucesso!");
 				}

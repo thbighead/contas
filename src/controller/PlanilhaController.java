@@ -41,7 +41,7 @@ public class PlanilhaController {
 	 * uma nova Pasta para evitar que o arquivo fique muito grande e nao seja
 	 * mais possivel acessa-lo.
 	 */
-	private static XSSFWorkbook carregaPasta() {
+	public static XSSFWorkbook carregaPasta() {
 		int i = indice0;
 		String nomeArq = nomeMaker(i);
 		File arquivo = new File(nomeArq);
@@ -136,7 +136,7 @@ public class PlanilhaController {
 	 * Carrega a planilha base com os cartoes e categorias cadastrados. O nome
 	 * da planilha deve ser "listas desp.xlsx".
 	 */
-	private static XSSFWorkbook carregaPlanilhaBase() {
+	public static XSSFWorkbook carregaPlanilhaBase() {
 		return abrePlanilha(new File("listas desp.xlsx"));
 	}
 

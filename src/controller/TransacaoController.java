@@ -51,6 +51,7 @@ public class TransacaoController {
 			i++;
 			row = planilhaBase.getRow(i);
 		}
+		colTipo.sort(null);
 
 		return colTipo.toArray(new String[colTipo.size()]);
 	}
@@ -67,6 +68,7 @@ public class TransacaoController {
 			i++;
 			row = planilhaBase.getRow(i);
 		}
+		colTipo.sort(null);
 
 		return colTipo;
 	}
@@ -100,9 +102,9 @@ public class TransacaoController {
 		}
 	}
 
-	public static void cadastrar(Transacao nova, String dataUtil) {
+	public static void cadastrar(Transacao nova) {
 		ArrayList<String> listaTodasTransacoes = listar();
-		if (!listaTodasTransacoes.contains(nova.data + " " + nova.categoria
+		if (!listaTodasTransacoes.contains(nova.dataReal + " " + nova.categoria
 				+ " " + nova.descricao + " " + nova.valor)) {
 			XSSFRow novaLinha = planilhaPasta.createRow(planilhaPasta
 					.getLastRowNum() + 1);
@@ -117,7 +119,7 @@ public class TransacaoController {
 			estiloCell.setDataFormat(createHelper.createDataFormat().getFormat(
 					"dd/mm/yyyy"));
 			novaLinha.getCell(0).setCellStyle(estiloCell);
-			novaLinha.getCell(0).setCellValue(nova.data.getTime());
+			novaLinha.getCell(0).setCellValue(nova.dataReal.getTime());
 
 			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
 			novaLinha.createCell(1);
@@ -126,8 +128,7 @@ public class TransacaoController {
 			estiloCell.setDataFormat(createHelper.createDataFormat().getFormat(
 					"dd/mm/yyyy"));
 			novaLinha.getCell(1).setCellStyle(estiloCell);
-			novaLinha.getCell(1).setCellValue(
-					DataController.stringToCalendar(dataUtil).getTime());
+			novaLinha.getCell(1).setCellValue(nova.dataEfetiva.getTime());
 
 			estiloCell = planilhaPasta.getWorkbook().createCellStyle();
 			novaLinha.createCell(3);
@@ -166,21 +167,20 @@ public class TransacaoController {
 		}
 	}
 
-	public static void alterar(XSSFRow toUpdate, Transacao nova, String dataUtil) {
+	public static void alterar(XSSFRow toUpdate, Transacao nova) {
 		ArrayList<String> listaTodasTransacoes = listar();
-		listaTodasTransacoes.remove(nova.data + " " + nova.categoria + " "
+		listaTodasTransacoes.remove(nova.dataReal + " " + nova.categoria + " "
 				+ nova.descricao + " " + nova.valor);
 		if ((toUpdate != null)
-				&& (!listaTodasTransacoes.contains(nova.data + " "
+				&& (!listaTodasTransacoes.contains(nova.dataReal + " "
 						+ nova.categoria + " " + nova.descricao + " "
 						+ nova.valor))) {
-			if (!DataController.calendarToString(nova.data).isEmpty()) {
-				toUpdate.getCell(0).setCellValue(nova.data.getTime());
+			if (!DataController.calendarToString(nova.dataReal).isEmpty()) {
+				toUpdate.getCell(0).setCellValue(nova.dataReal.getTime());
 			}
 
-			if (!dataUtil.isEmpty()) {
-				toUpdate.getCell(1).setCellValue(
-						DataController.stringToCalendar(dataUtil).getTime());
+			if (!DataController.calendarToString(nova.dataEfetiva).isEmpty()) {
+				toUpdate.getCell(1).setCellValue(nova.dataEfetiva.getTime());
 			}
 			// toUpdate.getCell(3).setCellValue();
 			if (nova.valor != null) {
@@ -219,6 +219,7 @@ public class TransacaoController {
 			i++;
 			row = planilhaPasta.getRow(i);
 		}
+		transacoes.sort(null);
 
 		return transacoes;
 	}
@@ -315,8 +316,6 @@ public class TransacaoController {
 					ultimaLinha.getCell(0).getNumericCellValue());
 			toDelete.getCell(1).setCellValue(
 					ultimaLinha.getCell(1).getNumericCellValue());
-			toDelete.getCell(3).setCellValue(
-					ultimaLinha.getCell(3).getCellFormula());
 			toDelete.getCell(4).setCellValue(
 					ultimaLinha.getCell(4).getNumericCellValue());
 			toDelete.getCell(5).setCellValue(
@@ -364,6 +363,22 @@ public class TransacaoController {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Recarrega a planilha base
+	 */
+	public static void recarregarBase() {
+		PlanilhaController.arq_base = PlanilhaController.carregaPlanilhaBase();
+		planilhaBase = PlanilhaController.arq_base.getSheet("categoria");
+	}
+
+	/**
+	 * Recarrega a pasta
+	 */
+	public static void recarregarPasta() {
+		PlanilhaController.arq_pasta = PlanilhaController.carregaPasta();
+		planilhaPasta = PlanilhaController.arq_pasta.getSheet("conta");
 	}
 
 	// public static void main(String[] args) {

@@ -8,6 +8,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,8 +39,10 @@ public class SelecionarTransacao extends JFrame {
 	private JTextField textDescricao;
 	private JComboBox comboTransacao;
 	private JFormattedTextField formattedTextQuantasVezes;
+	private JComboBox<String> comboData;
 	private String data = null, categoria = null, descricao = null,
 			nomeCartao = null;
+	private ArrayList<String> sorter;
 	private FocusListener descricaoFocusListener = new FocusListener() {
 		@Override
 		public void focusLost(FocusEvent e) {
@@ -49,9 +52,10 @@ public class SelecionarTransacao extends JFrame {
 				descricao = null;
 			}
 			comboTransacao.setVisible(false);
-			comboTransacao = new JComboBox(TransacaoController
-					.listar(data, categoria, descricao, parcelas, nomeCartao)
-					.keySet().toArray());
+			sorter = new ArrayList<String>(TransacaoController.listar(data,
+					categoria, descricao, parcelas, nomeCartao).keySet());
+			sorter.sort(null);
+			comboTransacao = new JComboBox(sorter.toArray());
 			comboTransacao.setBounds(167, 8, 357, 20);
 			contentPane.add(comboTransacao);
 			comboTransacao.setVisible(true);
@@ -72,9 +76,10 @@ public class SelecionarTransacao extends JFrame {
 					parcelas = 1;
 				}
 				comboTransacao.setVisible(false);
-				comboTransacao = new JComboBox(TransacaoController
-						.listar(data, categoria, descricao, parcelas,
-								nomeCartao).keySet().toArray());
+				sorter = new ArrayList<String>(TransacaoController.listar(data,
+						categoria, descricao, parcelas, nomeCartao).keySet());
+				sorter.sort(null);
+				comboTransacao = new JComboBox(sorter.toArray());
 				comboTransacao.setBounds(167, 8, 357, 20);
 				contentPane.add(comboTransacao);
 				comboTransacao.setVisible(true);
@@ -125,17 +130,17 @@ public class SelecionarTransacao extends JFrame {
 		lblFiltros.setBounds(10, 36, 46, 14);
 		contentPane.add(lblFiltros);
 
-		JComboBox<String> comboData = new JComboBox<String>(
-				DataController.listar(null));
+		comboData = new JComboBox<String>(DataController.listar(null));
 		comboData.setBounds(66, 33, 115, 20);
 		contentPane.add(comboData);
 		comboData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				data = comboData.getSelectedItem().toString();
 				comboTransacao.setVisible(false);
-				comboTransacao = new JComboBox(TransacaoController
-						.listar(data, categoria, descricao, parcelas,
-								nomeCartao).keySet().toArray());
+				sorter = new ArrayList<String>(TransacaoController.listar(data,
+						categoria, descricao, parcelas, nomeCartao).keySet());
+				sorter.sort(null);
+				comboTransacao = new JComboBox(sorter.toArray());
 				comboTransacao.setBounds(167, 8, 357, 20);
 				contentPane.add(comboTransacao);
 				comboTransacao.setVisible(true);
@@ -145,9 +150,10 @@ public class SelecionarTransacao extends JFrame {
 			data = comboData.getSelectedItem().toString();
 		}
 
-		comboTransacao = new JComboBox(TransacaoController
-				.listar(data, categoria,
-						descricao, parcelas, nomeCartao).keySet().toArray());
+		sorter = new ArrayList<String>(TransacaoController.listar(data,
+				categoria, descricao, parcelas, nomeCartao).keySet());
+		sorter.sort(null);
+		comboTransacao = new JComboBox(sorter.toArray());
 		comboTransacao.setBounds(167, 8, 357, 20);
 		contentPane.add(comboTransacao);
 
@@ -223,9 +229,10 @@ public class SelecionarTransacao extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				nomeCartao = comboCartao.getSelectedItem().toString();
 				comboTransacao.setVisible(false);
-				comboTransacao = new JComboBox(TransacaoController
-						.listar(data, categoria, descricao, parcelas,
-								nomeCartao).keySet().toArray());
+				sorter = new ArrayList<String>(TransacaoController.listar(data,
+						categoria, descricao, parcelas, nomeCartao).keySet());
+				sorter.sort(null);
+				comboTransacao = new JComboBox(sorter.toArray());
 				comboTransacao.setBounds(167, 8, 357, 20);
 				contentPane.add(comboTransacao);
 				comboTransacao.setVisible(true);
@@ -255,9 +262,10 @@ public class SelecionarTransacao extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				categoria = comboCategoria.getSelectedItem().toString();
 				comboTransacao.setVisible(false);
-				comboTransacao = new JComboBox(TransacaoController
-						.listar(data, categoria, descricao, parcelas,
-								nomeCartao).keySet().toArray());
+				sorter = new ArrayList<String>(TransacaoController.listar(data,
+						categoria, descricao, parcelas, nomeCartao).keySet());
+				sorter.sort(null);
+				comboTransacao = new JComboBox(sorter.toArray());
 				comboTransacao.setBounds(167, 8, 357, 20);
 				contentPane.add(comboTransacao);
 				comboTransacao.setVisible(true);
@@ -290,6 +298,16 @@ public class SelecionarTransacao extends JFrame {
 														.toString())));
 					}
 					alterarTransacao.setVisible(true);
+					textDescricao.setText("");
+					comboCategoria.setSelectedItem(null);
+					groupCartaoSN.clearSelection();
+					comboCartao.setSelectedIndex(0);
+					comboCartao.setVisible(false);
+					groupParceladoSN.clearSelection();
+					lblQuantasVezes.setVisible(false);
+					formattedTextQuantasVezes.setText("");
+					formattedTextQuantasVezes.setVisible(false);
+					dispose();
 				} else {
 					int selectedOption = JOptionPane.showConfirmDialog(null,
 							"Tem certeza de que quer excluir a transação "
@@ -303,11 +321,24 @@ public class SelecionarTransacao extends JFrame {
 										nomeCartao).get(
 										comboTransacao.getSelectedItem()
 												.toString())));
+						// recarrega a pasta
+						TransacaoController.recarregarPasta();
 						JOptionPane.showMessageDialog(null,
 								"Operação realizada com sucesso!");
+						comboTransacao.setVisible(false);
+						comboData = new JComboBox<String>(DataController
+								.listar(null));
+						data = comboData.getSelectedItem().toString();
+						sorter = new ArrayList<String>(TransacaoController
+								.listar(data, categoria, descricao, parcelas,
+										nomeCartao).keySet());
+						sorter.sort(null);
+						comboTransacao = new JComboBox(sorter.toArray());
+						comboTransacao.setBounds(167, 8, 357, 20);
+						contentPane.add(comboTransacao);
+						comboTransacao.setVisible(true);
 					}
 				}
-				dispose();
 			}
 		});
 
@@ -320,7 +351,6 @@ public class SelecionarTransacao extends JFrame {
 				comboCategoria.setSelectedItem(null);
 				groupCartaoSN.clearSelection();
 				comboCartao.setSelectedIndex(0);
-				;
 				comboCartao.setVisible(false);
 				groupParceladoSN.clearSelection();
 				lblQuantasVezes.setVisible(false);

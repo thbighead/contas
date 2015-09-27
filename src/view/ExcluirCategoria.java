@@ -21,6 +21,7 @@ public class ExcluirCategoria extends JFrame {
 	 */
 	private static final long serialVersionUID = 7190644287867828998L;
 	private JPanel contentPane;
+	private JComboBox<String> comboCategoria;
 
 	/**
 	 * Launch the application.
@@ -54,7 +55,7 @@ public class ExcluirCategoria extends JFrame {
 		lblCategoria.setBounds(10, 11, 60, 14);
 		contentPane.add(lblCategoria);
 
-		JComboBox<String> comboCategoria = new JComboBox<String>(
+		comboCategoria = new JComboBox<String>(
 				TransacaoController.listarCategorias());
 		comboCategoria.setBounds(100, 8, 249, 20);
 		contentPane.add(comboCategoria);
@@ -73,9 +74,15 @@ public class ExcluirCategoria extends JFrame {
 					TransacaoController.deletarCategoria(TransacaoController
 							.buscarCategoria(comboCategoria.getSelectedItem()
 									.toString()));
+					TransacaoController.recarregarBase();
 					JOptionPane.showMessageDialog(null,
 							"Operação realizada com sucesso!");
-					dispose();
+					comboCategoria.setVisible(false);
+					comboCategoria = new JComboBox<String>(
+							TransacaoController.listarCategorias());
+					comboCategoria.setBounds(100, 8, 249, 20);
+					contentPane.add(comboCategoria);
+					comboCategoria.setVisible(true);
 				}
 			}
 		});

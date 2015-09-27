@@ -130,6 +130,10 @@ public class SelecionarCartao extends JFrame {
 										.getSelectedItem().toString()));
 					}
 					alterarCartao.setVisible(true);
+					comboCartao.setSelectedItem(null);
+					comboDiaVencimento.setSelectedItem(null);
+					comboDiaVirada.setSelectedItem(null);
+					dispose();
 				} else {
 					int selectedOption = JOptionPane.showConfirmDialog(null,
 							"Tem certeza de que quer excluir o cartão "
@@ -140,17 +144,17 @@ public class SelecionarCartao extends JFrame {
 						CartaoController.deletar(CartaoController
 								.buscar(comboCartao.getSelectedItem()
 										.toString()));
+						CartaoController.recarregarBase();
 						JOptionPane.showMessageDialog(null,
 								"Operação realizada com sucesso!");
 						comboCartao.setVisible(false);
-						comboCartao = new JComboBox<String>(CartaoController.listar(diaVirada,
-								diaVencimento));
+						comboCartao = new JComboBox<String>(CartaoController
+								.listar(diaVirada, diaVencimento));
 						comboCartao.setBounds(134, 8, 180, 20);
 						contentPane.add(comboCartao);
 						comboCartao.setVisible(true);
 					}
 				}
-				dispose();
 			}
 		});
 

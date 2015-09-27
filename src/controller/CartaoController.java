@@ -292,6 +292,14 @@ public class CartaoController {
 		deletar(buscar(toDelete));
 	}
 
+	/**
+	 * Recarrega a planilha base
+	 */
+	public static void recarregarBase() {
+		PlanilhaController.arq_base = PlanilhaController.carregaPlanilhaBase();
+		planilha = PlanilhaController.arq_base.getSheet("cartoes");
+	}
+
 	// public static void main(String[] args) {
 	// System.out.println("alok-sevirabi".substring(0,
 	// "alok-sevirabi".indexOf("-")));
