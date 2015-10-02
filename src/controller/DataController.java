@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -50,6 +51,7 @@ public class DataController {
 			i++;
 			row = TransacaoController.planilhaPasta.getRow(i);
 		}
+		sorting(datas);
 
 		return datas;
 	}
@@ -297,6 +299,17 @@ public class DataController {
 	 */
 	public static String formataData(String data) {
 		return calendarToString(stringToCalendar(data));
+	}
+
+	/**
+	 * Ordena a lista em ordem alfanumerica e adiciona um elemento null ao
+	 * inicio da lista. IMPORTANTE: Todos os valores null sao excluidos no
+	 * inicio do metodo para evitar NullPointerException na hora do sort()
+	 */
+	private static void sorting(ArrayList<String> list) {
+		list.removeAll(Collections.singleton(null));
+		Collections.sort(list);
+		list.add(0, null);
 	}
 
 	// public static void main(String[] args) {

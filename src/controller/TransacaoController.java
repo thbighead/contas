@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.TreeMap;
 
 import model.Transacao;
@@ -51,7 +52,7 @@ public class TransacaoController {
 			i++;
 			row = planilhaBase.getRow(i);
 		}
-		colTipo.sort(null);
+		sorting(colTipo);
 
 		return colTipo.toArray(new String[colTipo.size()]);
 	}
@@ -68,7 +69,7 @@ public class TransacaoController {
 			i++;
 			row = planilhaBase.getRow(i);
 		}
-		colTipo.sort(null);
+		sorting(colTipo);
 
 		return colTipo;
 	}
@@ -219,7 +220,7 @@ public class TransacaoController {
 			i++;
 			row = planilhaPasta.getRow(i);
 		}
-		transacoes.sort(null);
+		sorting(transacoes);
 
 		return transacoes;
 	}
@@ -379,6 +380,19 @@ public class TransacaoController {
 	public static void recarregarPasta() {
 		PlanilhaController.arq_pasta = PlanilhaController.carregaPasta();
 		planilhaPasta = PlanilhaController.arq_pasta.getSheet("conta");
+	}
+
+
+
+	/**
+	 * Ordena a lista em ordem alfanumerica e adiciona um elemento null ao
+	 * inicio da lista. IMPORTANTE: Todos os valores null sao excluidos no
+	 * inicio do metodo para evitar NullPointerException na hora do sort()
+	 */
+	private static void sorting(ArrayList<String> list) {
+		list.removeAll(Collections.singleton(null));
+		Collections.sort(list);
+		list.add(0, null);
 	}
 
 	// public static void main(String[] args) {

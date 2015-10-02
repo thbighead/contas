@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import model.Cartao;
 
@@ -86,6 +87,7 @@ public class CartaoController {
 			i++;
 			row = planilha.getRow(i);
 		}
+		sorting(colCartoes);
 
 		return colCartoes;
 	}
@@ -130,6 +132,7 @@ public class CartaoController {
 			i++;
 			row = planilha.getRow(i);
 		}
+		sorting(colCartoes);
 
 		return colCartoes.toArray(new String[colCartoes.size()]);
 	}
@@ -175,6 +178,7 @@ public class CartaoController {
 			i++;
 			row = planilha.getRow(i);
 		}
+		sorting(colCartoes);
 
 		return colCartoes;
 	}
@@ -298,6 +302,17 @@ public class CartaoController {
 	public static void recarregarBase() {
 		PlanilhaController.arq_base = PlanilhaController.carregaPlanilhaBase();
 		planilha = PlanilhaController.arq_base.getSheet("cartoes");
+	}
+
+	/**
+	 * Ordena a lista em ordem alfanumerica e adiciona um elemento null ao
+	 * inicio da lista. IMPORTANTE: Todos os valores null sao excluidos no
+	 * inicio do metodo para evitar NullPointerException na hora do sort()
+	 */
+	private static void sorting(ArrayList<String> list) {
+		list.removeAll(Collections.singleton(null));
+		Collections.sort(list);
+		list.add(0, null);
 	}
 
 	// public static void main(String[] args) {

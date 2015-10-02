@@ -1,4 +1,4 @@
-// versao 1.3
+// versao 1.4
 package view;
 
 import java.awt.EventQueue;
@@ -27,7 +27,7 @@ public class Home extends JFrame {
 	 * VERSAO
 	 */
 	private static final long serialVersionUID = -7286910487129241658L;
-	private static final String version = "1.3";
+	private static final String version = "1.4";
 	private JPanel contentPane;
 
 	/**
