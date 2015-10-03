@@ -79,4 +79,4 @@ local.properties
 *.txt
 
 # generated xlsx
-Pasta1.xlsx
+*.xlsx
