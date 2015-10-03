@@ -304,8 +304,8 @@ public class CadastroTransacao extends JFrame {
 				} else {
 					/**
 					 * Monta a nova transacao, seja para cadastrar ou para
-					 * alterar. Ateh esse momento as datas real e efetiva sao a
-					 * mesma (a real)
+					 * alterar. Ateh esse momento as datas real e efetiva sao
+					 * iguais (a real)
 					 */
 					Transacao nova = new Transacao(comboCategoria
 							.getSelectedItem().toString(), textDescricao
@@ -353,9 +353,9 @@ public class CadastroTransacao extends JFrame {
 										.stringToCalendar(textDataUtil
 												.getText());
 							}
-							// cadastra
-							TransacaoController.cadastrar(nova);
 						}
+						// cadastra
+						TransacaoController.cadastrar(nova);
 					}
 
 					TransacaoController.recarregarPasta(); // recarrega a pasta
