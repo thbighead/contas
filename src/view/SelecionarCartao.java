@@ -124,11 +124,9 @@ public class SelecionarCartao extends JFrame {
 		btnSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (operacao.equals("Alterar")) {
-					if (alterarCartao == null) {
-						alterarCartao = new CadastroCartao(operacao,
-								CartaoController.buscar(comboCartao
-										.getSelectedItem().toString()));
-					}
+					alterarCartao = new CadastroCartao(operacao,
+							CartaoController.buscar(comboCartao
+									.getSelectedItem().toString()));
 					alterarCartao.setVisible(true);
 					comboCartao.setSelectedItem(null);
 					comboDiaVencimento.setSelectedItem(null);

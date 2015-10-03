@@ -288,15 +288,12 @@ public class SelecionarTransacao extends JFrame {
 		btnSelecionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (operacao.equals("Alterar")) {
-					if (alterarTransacao == null) {
-						alterarTransacao = new CadastroTransacao(operacao,
-								TransacaoController.buscar(TransacaoController
-										.listar(data, categoria, descricao,
-												parcelas, nomeCartao).get(
-												comboTransacao
-														.getSelectedItem()
-														.toString())));
-					}
+					alterarTransacao = new CadastroTransacao(operacao,
+							TransacaoController.buscar(TransacaoController
+									.listar(data, categoria, descricao,
+											parcelas, nomeCartao).get(
+											comboTransacao.getSelectedItem()
+													.toString())));
 					alterarTransacao.setVisible(true);
 					textDescricao.setText("");
 					comboCategoria.setSelectedItem(null);

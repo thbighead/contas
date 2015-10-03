@@ -1,4 +1,4 @@
-// versao 1.4
+// versao 1.5
 package view;
 
 import java.awt.EventQueue;
@@ -27,7 +27,7 @@ public class Home extends JFrame {
 	 * VERSAO
 	 */
 	private static final long serialVersionUID = -7286910487129241658L;
-	private static final String version = "1.4";
+	private static final String version = "1.5";
 	private JPanel contentPane;
 
 	/**
@@ -64,10 +64,8 @@ public class Home extends JFrame {
 		contentPane.add(btnNovaTransacao);
 		btnNovaTransacao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cadastrarNovaTransacao == null) {
-					cadastrarNovaTransacao = new CadastroTransacao("Cadastrar",
-							null);
-				}
+				cadastrarNovaTransacao = new CadastroTransacao("Cadastrar",
+						null);
 				cadastrarNovaTransacao.setVisible(true);
 			}
 		});
@@ -77,9 +75,7 @@ public class Home extends JFrame {
 		contentPane.add(btnAlterarTransacao);
 		btnAlterarTransacao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectTransacaoAlterar == null) {
-					selectTransacaoAlterar = new SelecionarTransacao("Alterar");
-				}
+				selectTransacaoAlterar = new SelecionarTransacao("Alterar");
 				selectTransacaoAlterar.setVisible(true);
 			}
 		});
@@ -89,9 +85,7 @@ public class Home extends JFrame {
 		contentPane.add(btnExcluirTransacao);
 		btnExcluirTransacao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectTransacaoExcluir == null) {
-					selectTransacaoExcluir = new SelecionarTransacao("Excluir");
-				}
+				selectTransacaoExcluir = new SelecionarTransacao("Excluir");
 				selectTransacaoExcluir.setVisible(true);
 			}
 		});
@@ -102,9 +96,7 @@ public class Home extends JFrame {
 		contentPane.add(btnCadastrarNovoCartao);
 		btnCadastrarNovoCartao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cadastrarNovoCartao == null) {
-					cadastrarNovoCartao = new CadastroCartao("Cadastrar", null);
-				}
+				cadastrarNovoCartao = new CadastroCartao("Cadastrar", null);
 				cadastrarNovoCartao.setVisible(true);
 			}
 		});
@@ -114,9 +106,7 @@ public class Home extends JFrame {
 		contentPane.add(btnAlterarCartao);
 		btnAlterarCartao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectCartaoAlterar == null) {
-					selectCartaoAlterar = new SelecionarCartao("Alterar");
-				}
+				selectCartaoAlterar = new SelecionarCartao("Alterar");
 				selectCartaoAlterar.setVisible(true);
 			}
 		});
@@ -126,9 +116,7 @@ public class Home extends JFrame {
 		contentPane.add(btnExcluirCartao);
 		btnExcluirCartao.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectCartaoExcluir == null) {
-					selectCartaoExcluir = new SelecionarCartao("Excluir");
-				}
+				selectCartaoExcluir = new SelecionarCartao("Excluir");
 				selectCartaoExcluir.setVisible(true);
 			}
 		});
@@ -140,9 +128,7 @@ public class Home extends JFrame {
 		contentPane.add(btnCadastrarNovaCategoria);
 		btnCadastrarNovaCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (cadastrarNovaCategoria == null) {
-					cadastrarNovaCategoria = new CadastroCategoria();
-				}
+				cadastrarNovaCategoria = new CadastroCategoria();
 				cadastrarNovaCategoria.setVisible(true);
 			}
 		});
@@ -152,9 +138,7 @@ public class Home extends JFrame {
 		contentPane.add(btnExcluirCategoria);
 		btnExcluirCategoria.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectCategoriaExcluir == null) {
-					selectCategoriaExcluir = new ExcluirCategoria();
-				}
+				selectCategoriaExcluir = new ExcluirCategoria();
 				selectCategoriaExcluir.setVisible(true);
 			}
 		});
