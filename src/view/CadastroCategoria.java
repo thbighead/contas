@@ -72,7 +72,7 @@ public class CadastroCategoria extends JFrame {
 							"Preencha os campos em branco");
 				} else {
 					TransacaoController.cadastrarCategoria(textCategoria
-							.getText());
+							.getText().toLowerCase());
 					TransacaoController.recarregarBase();
 					JOptionPane.showMessageDialog(null,
 							"Operação realizada com sucesso!");

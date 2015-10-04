@@ -147,8 +147,9 @@ public class CadastroTransacao extends JFrame {
 		MaskFormatter fmtData = null;
 		try {
 			fmtData = new MaskFormatter("##/##/####");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			e.printStackTrace();
 		}
 		fmtData.setPlaceholderCharacter('_');
 		formattedTextData = new JFormattedTextField(fmtData);
@@ -257,8 +258,9 @@ public class CadastroTransacao extends JFrame {
 		MaskFormatter fmtQtdVezes = null;
 		try {
 			fmtQtdVezes = new MaskFormatter("###");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			e.printStackTrace();
 		}
 		fmtQtdVezes.setPlaceholderCharacter('0');
 		formattedTextQuantasVezes = new JFormattedTextField(fmtQtdVezes);
@@ -309,8 +311,9 @@ public class CadastroTransacao extends JFrame {
 					 */
 					Transacao nova = new Transacao(comboCategoria
 							.getSelectedItem().toString(), textDescricao
+							.getText().toLowerCase(), formattedTextData
 							.getText(), formattedTextData.getText(),
-							formattedTextData.getText(), DinheiroController
+							DinheiroController
 									.stringToDinheiro(formattedTextValor
 											.getText()));
 

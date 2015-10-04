@@ -181,8 +181,9 @@ public class SelecionarTransacao extends JFrame {
 		MaskFormatter fmtQtdVezes = null;
 		try {
 			fmtQtdVezes = new MaskFormatter("###");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			e.printStackTrace();
 		}
 		fmtQtdVezes.setPlaceholderCharacter('0');
 		formattedTextQuantasVezes = new JFormattedTextField(fmtQtdVezes);

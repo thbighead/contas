@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class PlanilhaController {
@@ -64,6 +66,7 @@ public class PlanilhaController {
 				try {
 					arq_xlsx.close();
 				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, e.getMessage());
 					e.printStackTrace();
 				}
 			} else {
@@ -114,6 +117,7 @@ public class PlanilhaController {
 		try {
 			arq_xlsx.write(new FileOutputStream(arquivo));
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 		}
 		return arq_xlsx;
@@ -127,6 +131,7 @@ public class PlanilhaController {
 		try {
 			arq_xlsx = new XSSFWorkbook(new FileInputStream(arquivo));
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 		}
 		return arq_xlsx;
@@ -148,6 +153,7 @@ public class PlanilhaController {
 			arq_base.close();
 			arq_pasta.close();
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -159,6 +165,7 @@ public class PlanilhaController {
 		try {
 			arq_base.write(new FileOutputStream(new File("listas desp.xlsx")));
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -170,6 +177,7 @@ public class PlanilhaController {
 		try {
 			arq_pasta.write(new FileOutputStream(new File(nome_arq_pasta)));
 		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 		}
 	}

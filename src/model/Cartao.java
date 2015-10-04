@@ -42,17 +42,26 @@ public class Cartao {
 	 */
 	public Calendar calcDataCobranca(Calendar dataCompra) {
 		/**
+		 * Essas instancias de Calendar funcionam como ponteiros, para evitar
+		 * que duas variaveis Calendar apontem para o mesmo objeto, foi
+		 * necessario instanciar uma nova e copiar a data da outra. Isso evita o
+		 * bug em que as duas datas (real e efetiva) sejam alteradas mesmo
+		 * quando o esperado eh que apenas uma seja.
+		 */
+		Calendar dataCobranca = Calendar.getInstance();
+		dataCobranca.setTime(dataCompra.getTime());
+		/**
 		 * Se a compra foi efetuada no dia da virada do cartao ou depois, ela
 		 * soh serah cobrada na proxima fatura, ou seja...
 		 */
-		if (dataCompra.get(Calendar.DAY_OF_MONTH) >= diaVirada) {
-			dataCompra.add(Calendar.MONTH, 1); // ... no proximo mes.
+		if (dataCobranca.get(Calendar.DAY_OF_MONTH) >= diaVirada) {
+			dataCobranca.add(Calendar.MONTH, 1); // ... no proximo mes.
 		}
 		/**
 		 * A compra eh cobrada no dia do vencimento do cartao
 		 */
-		dataCompra.set(Calendar.DAY_OF_MONTH, diaVencimento);
+		dataCobranca.set(Calendar.DAY_OF_MONTH, diaVencimento);
 
-		return dataCompra;
+		return dataCobranca;
 	}
 }

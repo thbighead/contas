@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
+import javax.swing.JOptionPane;
+
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 
@@ -289,6 +291,7 @@ public class DataController {
 		try {
 			ret.setTime(formatador.parse(data));
 		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
 		}
 		return ret;

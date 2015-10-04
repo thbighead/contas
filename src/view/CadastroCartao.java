@@ -110,7 +110,7 @@ public class CadastroCartao extends JFrame {
 					/**
 					 * Monta o novo cartao, seja para cadastrar ou para alterar
 					 */
-					Cartao novo = new Cartao(textNome.getText(),
+					Cartao novo = new Cartao(textNome.getText().toLowerCase(),
 							getComboSelectedItemAsInt(comboDiaVirada),
 							getComboSelectedItemAsInt(comboDiaVencimento));
 

@@ -1,4 +1,4 @@
-// versao 1.6
+// versao 1.7
 package view;
 
 import java.awt.EventQueue;
@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
@@ -27,7 +28,7 @@ public class Home extends JFrame {
 	 * VERSAO
 	 */
 	private static final long serialVersionUID = -7286910487129241658L;
-	private static final String version = "1.6";
+	private static final String version = "1.7";
 	private JPanel contentPane;
 
 	/**
@@ -40,6 +41,7 @@ public class Home extends JFrame {
 					@SuppressWarnings("unused")
 					Home frame = new Home();
 				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage());
 					e.printStackTrace();
 				}
 			}
