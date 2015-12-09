@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -130,7 +131,9 @@ public class SelecionarTransacao extends JFrame {
 		lblFiltros.setBounds(10, 36, 46, 14);
 		contentPane.add(lblFiltros);
 
-		comboData = new JComboBox<String>(DataController.listar(null));
+		comboData = new JComboBox<String>();
+		comboData.setModel(new DefaultComboBoxModel<String>(DataController
+				.listar(null)));
 		comboData.setBounds(66, 33, 115, 20);
 		contentPane.add(comboData);
 		comboData.addActionListener(new ActionListener() {
@@ -221,8 +224,9 @@ public class SelecionarTransacao extends JFrame {
 		groupCartaoSN.add(rdbtnCartaoSim);
 		groupCartaoSN.add(rdbtnCartaoNao);
 
-		JComboBox<String> comboCartao = new JComboBox<String>(
-				CartaoController.listar(0, 0));
+		JComboBox<String> comboCartao = new JComboBox<String>();
+		comboCartao.setModel(new DefaultComboBoxModel<String>(CartaoController
+				.listar(0, 0)));
 		comboCartao.setBounds(255, 83, 150, 20);
 		contentPane.add(comboCartao);
 		comboCartao.setVisible(false);
@@ -255,8 +259,9 @@ public class SelecionarTransacao extends JFrame {
 		lblCategoria.setBounds(10, 111, 75, 14);
 		contentPane.add(lblCategoria);
 
-		JComboBox<String> comboCategoria = new JComboBox<String>(
-				TransacaoController.listarCategorias());
+		JComboBox<String> comboCategoria = new JComboBox<String>();
+		comboCategoria.setModel(new DefaultComboBoxModel(TransacaoController
+				.listarCategorias()));
 		comboCategoria.setBounds(95, 108, 142, 20);
 		contentPane.add(comboCategoria);
 		comboCategoria.addActionListener(new ActionListener() {

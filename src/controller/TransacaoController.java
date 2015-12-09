@@ -167,6 +167,12 @@ public class TransacaoController {
 			PlanilhaController.salvarPasta();
 		}
 	}
+	
+	public static void cadastrar(Transacao[] novas) {
+		for (Transacao nova : novas) {
+			cadastrar(nova);
+		}
+	}
 
 	public static void alterar(XSSFRow toUpdate, Transacao nova) {
 		ArrayList<String> listaTodasTransacoes = listar();

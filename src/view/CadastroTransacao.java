@@ -9,12 +9,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -134,8 +136,9 @@ public class CadastroTransacao extends JFrame {
 		lblCategoria.setBounds(10, 36, 70, 14);
 		contentPane.add(lblCategoria);
 
-		comboCategoria = new JComboBox<String>(
-				TransacaoController.listarCategorias());
+		comboCategoria = new JComboBox<String>();
+		comboCategoria.setModel(new DefaultComboBoxModel<String>(
+				TransacaoController.listarCategorias()));
 		comboCategoria.setBounds(90, 33, 180, 20);
 		contentPane.add(comboCategoria);
 
@@ -146,7 +149,7 @@ public class CadastroTransacao extends JFrame {
 
 		MaskFormatter fmtData = null;
 		try {
-			fmtData = new MaskFormatter("##/##/####");
+			fmtData = new MaskFormatter("##/##/##");
 		} catch (ParseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			e.printStackTrace();
@@ -174,7 +177,9 @@ public class CadastroTransacao extends JFrame {
 		groupCartaoSN.add(rdbtnCartaoSim);
 		groupCartaoSN.add(rdbtnCartaoNao);
 
-		comboCartao = new JComboBox<String>(CartaoController.listar(0, 0));
+		comboCartao = new JComboBox<String>();
+		comboCartao.setModel(new DefaultComboBoxModel<String>(CartaoController
+				.listar(0, 0)));
 		comboCartao.setBounds(469, 8, 145, 20);
 		contentPane.add(comboCartao);
 		comboCartao.setVisible(false);
@@ -213,8 +218,8 @@ public class CadastroTransacao extends JFrame {
 		lblValor.setBounds(10, 86, 46, 14);
 		contentPane.add(lblValor);
 
-		NumberFormatter fmtValor = new NumberFormatter(
-				new DecimalFormat("#.##"));
+		DecimalFormat fmtDecimal = new DecimalFormat("0.00");
+		NumberFormatter fmtValor = new NumberFormatter(fmtDecimal);
 		formattedTextValor = new JFormattedTextField(fmtValor);
 		formattedTextValor.setBounds(90, 83, 180, 20);
 		contentPane.add(formattedTextValor);
@@ -255,14 +260,10 @@ public class CadastroTransacao extends JFrame {
 		contentPane.add(lblQuantasVezes);
 		lblQuantasVezes.setVisible(false);
 
-		MaskFormatter fmtQtdVezes = null;
-		try {
-			fmtQtdVezes = new MaskFormatter("###");
-		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-			e.printStackTrace();
-		}
-		fmtQtdVezes.setPlaceholderCharacter('0');
+		NumberFormatter fmtQtdVezes;
+		DecimalFormat fmtInteger = new DecimalFormat("0");
+		fmtQtdVezes = new NumberFormatter(fmtInteger);
+		fmtQtdVezes.setMinimum(1);
 		formattedTextQuantasVezes = new JFormattedTextField(fmtQtdVezes);
 		formattedTextQuantasVezes.setBounds(574, 83, 40, 20);
 		contentPane.add(formattedTextQuantasVezes);
@@ -316,6 +317,7 @@ public class CadastroTransacao extends JFrame {
 							DinheiroController
 									.stringToDinheiro(formattedTextValor
 											.getText()));
+					Transacao[] novas = null;
 
 					if (operacao.equals("Alterar")) {
 						if (ehDeCartao()) {
@@ -336,7 +338,7 @@ public class CadastroTransacao extends JFrame {
 							Cartao card = CartaoController
 									.getCartao(comboCartao.getSelectedItem()
 											.toString());
-							nova.transaCartaoParcelada(card,
+							novas = nova.transaCartaoParcelada(card,
 									formattedTextQuantasVezes.getText());
 						} else if (!ehParcelado() && ehDeCartao()) {
 							/**
@@ -349,7 +351,8 @@ public class CadastroTransacao extends JFrame {
 													.toString()));
 							nova.transaCartao(card);
 						} else if (ehParcelado() && !ehDeCartao()) {
-							nova.parcelar(formattedTextQuantasVezes.getText());
+							novas = nova.parcelar(formattedTextQuantasVezes
+									.getText());
 						} else {
 							if (ehApenasDeDiasUteis()) {
 								nova.dataEfetiva = DataController
@@ -357,8 +360,13 @@ public class CadastroTransacao extends JFrame {
 												.getText());
 							}
 						}
-						// cadastra
-						TransacaoController.cadastrar(nova);
+						// cadastra a transacao ou as transacoes em caso de
+						// parcelamento
+						if (novas.equals(null)) {
+							TransacaoController.cadastrar(nova);
+						} else {
+							TransacaoController.cadastrar(novas);
+						}
 					}
 
 					TransacaoController.recarregarPasta(); // recarrega a pasta
@@ -386,8 +394,8 @@ public class CadastroTransacao extends JFrame {
 	 * Verdadeiro se a transacao setada for parcelada
 	 */
 	private boolean ehParcelado() {
-		return (Integer.parseInt(formattedTextQuantasVezes.getText()) > 1)
-				&& (groupParceladoSN.isSelected(rdbtnParceladoSim.getModel()));
+		return ((groupParceladoSN.isSelected(rdbtnParceladoSim.getModel()) && (Integer
+				.parseInt(formattedTextQuantasVezes.getText()) > 1)));
 	}
 
 	/**

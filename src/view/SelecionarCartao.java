@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -59,8 +60,9 @@ public class SelecionarCartao extends JFrame {
 		lblEscolhaUmCartao.setBounds(10, 11, 114, 14);
 		contentPane.add(lblEscolhaUmCartao);
 
-		comboCartao = new JComboBox<String>(CartaoController.listar(diaVirada,
-				diaVencimento));
+		comboCartao = new JComboBox<String>();
+		comboCartao.setModel(new DefaultComboBoxModel<String>(CartaoController
+				.listar(diaVirada, diaVencimento)));
 		comboCartao.setBounds(134, 8, 180, 20);
 		contentPane.add(comboCartao);
 
@@ -72,8 +74,9 @@ public class SelecionarCartao extends JFrame {
 		lblDiaDeVirada.setBounds(20, 61, 114, 14);
 		contentPane.add(lblDiaDeVirada);
 
-		JComboBox<Integer> comboDiaVirada = new JComboBox<Integer>(
-				CartaoController.dias);
+		JComboBox<Integer> comboDiaVirada = new JComboBox<Integer>();
+		comboDiaVirada.setModel(new DefaultComboBoxModel<Integer>(
+				CartaoController.dias));
 		comboDiaVirada.setBounds(144, 58, 55, 20);
 		contentPane.add(comboDiaVirada);
 		comboDiaVirada.addActionListener(new ActionListener() {
@@ -85,8 +88,9 @@ public class SelecionarCartao extends JFrame {
 					diaVirada = 0;
 				}
 				comboCartao.setVisible(false);
-				comboCartao = new JComboBox<String>(CartaoController.listar(
-						diaVirada, diaVencimento));
+				comboCartao = new JComboBox<String>();
+				comboCartao.setModel(new DefaultComboBoxModel<String>(
+						CartaoController.listar(diaVirada, diaVencimento)));
 				comboCartao.setBounds(134, 8, 180, 20);
 				contentPane.add(comboCartao);
 				comboCartao.setVisible(true);
@@ -97,8 +101,9 @@ public class SelecionarCartao extends JFrame {
 		lblDiaDeVencimento.setBounds(20, 86, 114, 14);
 		contentPane.add(lblDiaDeVencimento);
 
-		JComboBox<Integer> comboDiaVencimento = new JComboBox<Integer>(
-				CartaoController.dias);
+		JComboBox<Integer> comboDiaVencimento = new JComboBox<Integer>();
+		comboDiaVencimento.setModel(new DefaultComboBoxModel<Integer>(
+				CartaoController.dias));
 		comboDiaVencimento.setBounds(144, 83, 55, 20);
 		contentPane.add(comboDiaVencimento);
 		comboDiaVencimento.addActionListener(new ActionListener() {

@@ -25,7 +25,7 @@ public class DataController {
 	 * formato de data esperado (dd/mm/aaaa).
 	 */
 	final static DateFormat formatador = DateFormat
-			.getDateInstance(DateFormat.MEDIUM);
+			.getDateInstance(DateFormat.SHORT);
 	/**
 	 * lista com todos os feriados que importam para transacoes bancarias no
 	 * Brasil

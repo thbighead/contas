@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -55,8 +56,9 @@ public class ExcluirCategoria extends JFrame {
 		lblCategoria.setBounds(10, 11, 60, 14);
 		contentPane.add(lblCategoria);
 
-		comboCategoria = new JComboBox<String>(
-				TransacaoController.listarCategorias());
+		comboCategoria = new JComboBox<String>();
+		comboCategoria.setModel(new DefaultComboBoxModel<String>(
+				TransacaoController.listarCategorias()));
 		comboCategoria.setBounds(100, 8, 249, 20);
 		contentPane.add(comboCategoria);
 
@@ -78,8 +80,8 @@ public class ExcluirCategoria extends JFrame {
 					JOptionPane.showMessageDialog(null,
 							"Operação realizada com sucesso!");
 					comboCategoria.setVisible(false);
-					comboCategoria = new JComboBox<String>(
-							TransacaoController.listarCategorias());
+					comboCategoria = new JComboBox<String>(TransacaoController
+							.listarCategorias());
 					comboCategoria.setBounds(100, 8, 249, 20);
 					contentPane.add(comboCategoria);
 					comboCategoria.setVisible(true);

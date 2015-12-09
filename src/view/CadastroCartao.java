@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -30,10 +31,8 @@ public class CadastroCartao extends JFrame {
 	 * Components
 	 */
 	private JTextField textNome;
-	private JComboBox<Integer> comboDiaVirada = new JComboBox<Integer>(
-			CartaoController.dias);
-	private JComboBox<Integer> comboDiaVencimento = new JComboBox<Integer>(
-			CartaoController.dias);
+	private JComboBox<Integer> comboDiaVirada = new JComboBox<Integer>();
+	private JComboBox<Integer> comboDiaVencimento = new JComboBox<Integer>();
 
 	/**
 	 * Test the application.
@@ -58,6 +57,13 @@ public class CadastroCartao extends JFrame {
 	 * Create the frame.
 	 */
 	public CadastroCartao(String operacao, XSSFRow linha) {
+		/**
+		 * Setting "generics version" to open design tab properly
+		 */
+		comboDiaVirada.setModel(new DefaultComboBoxModel<Integer>(
+				CartaoController.dias));
+		comboDiaVencimento.setModel(new DefaultComboBoxModel<Integer>(
+				CartaoController.dias));
 		/**
 		 * Setting the window
 		 */

@@ -69,7 +69,7 @@ public class Transacao {
 		for (int i = 0; i < valores.length; i++) {
 			transacaoParcelada[i] = new Transacao(this.categoria,
 					this.descricao + " " + qtdParcelas + "/" + (i + 1),
-					this.dataReal, c, valores[i]);
+					this.dataReal, (Calendar) c.clone(), valores[i]);
 			c.add(Calendar.MONTH, 1);
 		}
 
@@ -119,8 +119,9 @@ public class Transacao {
 		for (int i = 0; i < valores.length; i++) {
 			transacaoParcelada[i] = new Transacao(this.categoria,
 					this.descricao + " " + qtdParcelas + "/" + (i + 1),
-					this.dataReal, DataController.primeiroDiaUtilAPartirDe(c),
-					valores[i]);
+					this.dataReal,
+					DataController.primeiroDiaUtilAPartirDe((Calendar) c
+							.clone()), valores[i]);
 			c.add(Calendar.MONTH, 1);
 		}
 
