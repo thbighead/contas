@@ -314,6 +314,12 @@ public class DataController {
 		Collections.sort(list);
 		list.add(0, null);
 	}
+	
+	public static String somaDiasAData(String data, String diasASomar) {
+		Calendar c_data = stringToCalendar(data);
+		c_data.add(Calendar.MONTH, Integer.parseInt(diasASomar) / 30);
+		return calendarToString(c_data);
+	}
 
 	// public static void main(String[] args) {
 	// Calendar c = Calendar.getInstance();

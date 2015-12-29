@@ -24,6 +24,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 import controller.CartaoController;
 import controller.DataController;
@@ -36,6 +38,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 
 import model.Cartao;
 import model.Transacao;
+
+import javax.swing.JSpinner;
 
 public class CadastroTransacao extends JFrame {
 
@@ -61,7 +65,13 @@ public class CadastroTransacao extends JFrame {
 	private JRadioButton rdbtnParceladoSim;
 	private JRadioButton rdbtnParceladoNao;
 	private ButtonGroup groupParceladoSN;
+	private JLabel lblQuantasVezes;
 	private JLabel lblParcelado;
+	private JSpinner qtdDiasParaPagar;
+	private JTextField textDataComDiasParaPagar;
+	private JCheckBox chckbxDiasAdicionaisParaPagar;
+	private JLabel lblDiasParaPagar;
+
 	/**
 	 * Define o que acontece quando o campo de data perde o foco: ao perde-lo,
 	 * testa se o campo ainda tem algum caractere em branco (algum "_"), caso
@@ -78,6 +88,13 @@ public class CadastroTransacao extends JFrame {
 					textDataUtil.setText(DataController
 							.primeiroDiaUtilAPartirDe(formattedTextData
 									.getText()));
+				}
+				if (chckbxDiasAdicionaisParaPagar.isSelected()) {
+					textDataComDiasParaPagar.setText(DataController
+							.primeiroDiaUtilAPartirDe(DataController
+									.somaDiasAData(formattedTextData.getText(),
+											qtdDiasParaPagar.getValue()
+													.toString())));
 				}
 			}
 		}
@@ -115,7 +132,7 @@ public class CadastroTransacao extends JFrame {
 		 */
 		setTitle(operacao + " transação"); // define a operacao como titulo
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 640, 200);
+		setBounds(100, 100, 640, 215);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -255,7 +272,7 @@ public class CadastroTransacao extends JFrame {
 		groupParceladoSN.add(rdbtnParceladoSim);
 		groupParceladoSN.add(rdbtnParceladoNao);
 
-		JLabel lblQuantasVezes = new JLabel("Quantas vezes?");
+		lblQuantasVezes = new JLabel("Quantas vezes?");
 		lblQuantasVezes.setBounds(469, 86, 95, 14);
 		contentPane.add(lblQuantasVezes);
 		lblQuantasVezes.setVisible(false);
@@ -284,21 +301,66 @@ public class CadastroTransacao extends JFrame {
 			}
 		});
 
+		// Possivel quantidade de dias diferenciada para começar o pagamento
+		chckbxDiasAdicionaisParaPagar = new JCheckBox(
+				"Dias adicionais para pagar?");
+		chckbxDiasAdicionaisParaPagar.setBounds(10, 107, 190, 23);
+		contentPane.add(chckbxDiasAdicionaisParaPagar);
+
+		lblDiasParaPagar = new JLabel("Dias para pagar:");
+		lblDiasParaPagar.setBounds(206, 110, 95, 14);
+		contentPane.add(lblDiasParaPagar);
+		lblDiasParaPagar.setVisible(false);
+
+		SpinnerModel SMQtdDiasParaPagar = new SpinnerNumberModel(30, 30, 360,
+				30);
+		qtdDiasParaPagar = new JSpinner(SMQtdDiasParaPagar);
+		qtdDiasParaPagar.setBounds(305, 108, 40, 20);
+		contentPane.add(qtdDiasParaPagar);
+		qtdDiasParaPagar.setVisible(false);
+
+		textDataComDiasParaPagar = new JTextField();
+		textDataComDiasParaPagar.setBounds(397, 108, 180, 20);
+		contentPane.add(textDataComDiasParaPagar);
+		textDataComDiasParaPagar.setColumns(10);
+		textDataComDiasParaPagar.setEnabled(false);
+		textDataComDiasParaPagar.setVisible(false);
+
+		chckbxDiasAdicionaisParaPagar.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				int state = event.getStateChange();
+				if (state == ItemEvent.SELECTED) {
+					lblDiasParaPagar.setVisible(true);
+					qtdDiasParaPagar.setVisible(true);
+					textDataComDiasParaPagar.setVisible(true);
+					chckbxApenasDiaUtil.setSelected(false);
+					chckbxApenasDiaUtil.setEnabled(false);
+				} else if (state == ItemEvent.DESELECTED) {
+					chckbxApenasDiaUtil.setEnabled(true);
+					lblDiasParaPagar.setVisible(false);
+					qtdDiasParaPagar.setVisible(false);
+					textDataComDiasParaPagar.setVisible(false);
+					qtdDiasParaPagar.setValue(60);
+					textDataComDiasParaPagar.setText("");
+				}
+			}
+		});
+
 		// Alterar?
 		alterarLoad(operacao, linha);
 
 		// Botoes
 		JButton btnLimpar = new JButton("Limpar");
-		btnLimpar.setBounds(10, 130, 89, 23);
+		btnLimpar.setBounds(10, 143, 89, 23);
 		contentPane.add(btnLimpar);
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				limparCampos(lblQuantasVezes);
+				limparCampos();
 			}
 		});
 
 		JButton btnSalvar = new JButton(operacao);
-		btnSalvar.setBounds(519, 130, 95, 23);
+		btnSalvar.setBounds(519, 143, 95, 23);
 		contentPane.add(btnSalvar);
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -331,6 +393,11 @@ public class CadastroTransacao extends JFrame {
 						// altera
 						TransacaoController.alterar(linha, nova);
 					} else {
+						if (chckbxDiasAdicionaisParaPagar.isSelected()) {
+							nova.dataEfetiva = DataController
+									.stringToCalendar(textDataComDiasParaPagar
+											.getText());
+						}
 						if (ehParcelado() && ehDeCartao()) {
 							/**
 							 * Monta o cartao selecionado
@@ -360,8 +427,10 @@ public class CadastroTransacao extends JFrame {
 												.getText());
 							}
 						}
-						// cadastra a transacao ou as transacoes em caso de
-						// parcelamento
+						/**
+						 * Cadastra a transacao ou as transacoes em caso de
+						 * parcelamento
+						 */
 						if (novas.equals(null)) {
 							TransacaoController.cadastrar(nova);
 						} else {
@@ -373,7 +442,7 @@ public class CadastroTransacao extends JFrame {
 					alertMessage("Operação realizada com sucesso!");
 					// depois de alterar nao tem pq manter a janela
 					if (operacao.equals("Alterar")) {
-						limparCampos(lblQuantasVezes);
+						limparCampos();
 						dispose();
 					}
 				}
@@ -381,7 +450,7 @@ public class CadastroTransacao extends JFrame {
 		});
 
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(271, 130, 89, 23);
+		btnCancelar.setBounds(271, 143, 89, 23);
 		contentPane.add(btnCancelar);
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -458,7 +527,7 @@ public class CadastroTransacao extends JFrame {
 			}
 			/**
 			 * Alteracao nao manipula todas as parcelas ao mesmo tempo, cada
-			 * parcela deve ser alterada como uma transacao individual
+			 * parcela deve ser alterada como uma transacao individual.
 			 */
 			lblParcelado.setVisible(false);
 			rdbtnParceladoSim.setVisible(false);
@@ -469,7 +538,7 @@ public class CadastroTransacao extends JFrame {
 	/**
 	 * Limpa todos os campos da janela
 	 */
-	private void limparCampos(JLabel lblQuantasVezes) {
+	private void limparCampos() {
 		textDescricao.setText("");
 		comboCategoria.setSelectedItem(null);
 		formattedTextData.setText("");
@@ -484,6 +553,12 @@ public class CadastroTransacao extends JFrame {
 		lblQuantasVezes.setVisible(false);
 		formattedTextQuantasVezes.setText("");
 		formattedTextQuantasVezes.setVisible(false);
+		chckbxDiasAdicionaisParaPagar.setSelected(false);
+		lblDiasParaPagar.setVisible(false);
+		qtdDiasParaPagar.setVisible(false);
+		textDataComDiasParaPagar.setVisible(false);
+		qtdDiasParaPagar.setValue(60);
+		textDataComDiasParaPagar.setText("");
 	}
 
 	/**
