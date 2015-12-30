@@ -431,7 +431,7 @@ public class CadastroTransacao extends JFrame {
 						 * Cadastra a transacao ou as transacoes em caso de
 						 * parcelamento
 						 */
-						if (novas.equals(null)) {
+						if (novas == null) {
 							TransacaoController.cadastrar(nova);
 						} else {
 							TransacaoController.cadastrar(novas);
