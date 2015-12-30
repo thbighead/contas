@@ -21,6 +21,14 @@ public class Cartao {
 	public Calendar calcDataCobranca(String dataCompra) {
 		Calendar cDataCobranca = DataController.stringToCalendar(dataCompra);
 
+		if (diaVirada > diaVencimento) {
+			cDataCobranca.add(Calendar.MONTH, 1);
+			if ((cDataCobranca.get(Calendar.MONTH) == Calendar.FEBRUARY)
+					&& (Integer.parseInt(dataCompra.substring(0, 2)) > 27)) {
+				cDataCobranca.set(Calendar.DAY_OF_MONTH, 28);
+			}
+		}
+
 		/**
 		 * Se a compra foi efetuada no dia da virada do cartao ou depois, ela
 		 * soh serah cobrada na proxima fatura, ou seja...
@@ -50,6 +58,15 @@ public class Cartao {
 		 */
 		Calendar dataCobranca = Calendar.getInstance();
 		dataCobranca.setTime(dataCompra.getTime());
+
+		if (diaVirada > diaVencimento) {
+			dataCobranca.add(Calendar.MONTH, 1);
+			if ((dataCobranca.get(Calendar.MONTH) == Calendar.FEBRUARY)
+					&& (dataCompra.get(Calendar.DAY_OF_MONTH) > 27)) {
+				dataCobranca.set(Calendar.DAY_OF_MONTH, 28);
+			}
+		}
+
 		/**
 		 * Se a compra foi efetuada no dia da virada do cartao ou depois, ela
 		 * soh serah cobrada na proxima fatura, ou seja...

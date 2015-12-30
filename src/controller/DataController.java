@@ -317,7 +317,7 @@ public class DataController {
 	
 	public static String somaDiasAData(String data, String diasASomar) {
 		Calendar c_data = stringToCalendar(data);
-		c_data.add(Calendar.MONTH, Integer.parseInt(diasASomar) / 30);
+		c_data.add(Calendar.MONTH, (Integer.parseInt(diasASomar) / 30) - 1);
 		return calendarToString(c_data);
 	}
 

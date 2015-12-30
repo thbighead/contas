@@ -312,7 +312,7 @@ public class CadastroTransacao extends JFrame {
 		contentPane.add(lblDiasParaPagar);
 		lblDiasParaPagar.setVisible(false);
 
-		SpinnerModel SMQtdDiasParaPagar = new SpinnerNumberModel(30, 30, 360,
+		SpinnerModel SMQtdDiasParaPagar = new SpinnerNumberModel(60, 60, 360,
 				30);
 		qtdDiasParaPagar = new JSpinner(SMQtdDiasParaPagar);
 		qtdDiasParaPagar.setBounds(305, 108, 40, 20);

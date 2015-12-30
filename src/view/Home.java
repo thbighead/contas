@@ -1,4 +1,4 @@
-// versao 1.9
+// versao 1.10
 package view;
 
 import java.awt.EventQueue;
@@ -28,7 +28,7 @@ public class Home extends JFrame {
 	 * VERSAO
 	 */
 	private static final long serialVersionUID = -7286910487129241658L;
-	private static final String version = "1.9";
+	private static final String version = "1.10";
 	private JPanel contentPane;
 
 	/**

@@ -90,7 +90,7 @@ public class Transacao {
 	 */
 	public void transaCartao(Cartao cartao) {
 		this.descricao = cartao.nome + "-" + this.descricao;
-		this.dataEfetiva = cartao.calcDataCobranca(this.dataReal);
+		this.dataEfetiva = cartao.calcDataCobranca(this.dataEfetiva);
 	}
 
 	/**
